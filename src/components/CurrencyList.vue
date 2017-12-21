@@ -7,19 +7,22 @@
   >
     <template slot="items" slot-scope="props">
       <tr @click="props.expanded = !props.expanded">
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.calories }}</td>
-        <td class="text-xs-right">{{ props.item.fat }}</td>
-        <td class="text-xs-right">{{ props.item.carbs }}</td>
-        <td class="text-xs-right">{{ props.item.protein }}</td>
-        <td class="text-xs-right">{{ props.item.sodium }}</td>
-        <td class="text-xs-right">{{ props.item.calcium }}</td>
-        <td class="text-xs-right">{{ props.item.iron }}</td>
+        <td class="text-xs-center">{{ props.item.rank }}</td>
+        <td class="text-xs-left">{{ props.item.name }}</td>
+        <td class="text-xs-center">{{ props.item.symbol }}</td>
+        <td class="text-xs-right">{{ props.item.marketCap }}</td>
+        <td class="text-xs-right">{{ props.item.currentPrice }}</td>
+        <td class="text-xs-right">{{ props.item.volume24h }}</td>
+        <td class="text-xs-right">{{ props.item.percentChange1h }}</td>
+        <td class="text-xs-right">{{ props.item.percentChange24h }}</td>
+        <td class="text-xs-right">{{ props.item.percentChange7d }}</td>
+        <td class="text-xs-right">{{ props.item.maxPrice }}</td>
+        <td class="text-xs-right">{{ props.item.fairPrice }}</td>
       </tr>
     </template>
     <template slot="expand" slot-scope="props">
       <v-card flat>
-        <v-card-text>Peek-a-boo!</v-card-text>
+        <v-card-text>Other coin attributes, subjective valuation and comments</v-card-text>
       </v-card>
     </template>
   </v-data-table>
@@ -35,7 +38,7 @@
           { text: 'Symbol', value: 'symbol' },
           { text: 'Market Cap', value: 'marketCap' },
           { text: 'Price', value: 'currentPrice' },
-          { text: 'Volume', value: 'volume24h' },
+          { text: 'Volume (24h)', value: 'volume24h' },
           { text: '% 1h', value: 'percentChange1h' },
           { text: '% 24h', value: 'percentChange24h' },
           { text: '% 7d', value: 'percentChange7d' },
