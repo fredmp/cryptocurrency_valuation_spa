@@ -1,0 +1,11 @@
+{
+  "name": "crypto_currency_valuation",
+  "version": "0.0.1",
+  "description": "Crypto currency valuation tool",
+  "author": "Frederico Martins Porto",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install express",
+    "start": "node server.js"
+  }
+}
