@@ -5,7 +5,6 @@
   "author": "Frederico Martins Porto",
   "private": true,
   "scripts": {
-    "postinstall": "npm install express",
-    "start": "node server.js"
+    "postinstall": "npm install express"
   }
 }
