@@ -8,7 +8,7 @@ Vue.use(Vuex)
 
 const state = {
   value: 0,
-  cities: []
+  currencies: []
 }
 
 export const store = new Vuex.Store({

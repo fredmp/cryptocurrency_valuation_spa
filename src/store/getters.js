@@ -2,6 +2,6 @@ export const value = state => {
   return state.value
 }
 
-export const cities = state => {
-  return state.cities
+export const currencies = state => {
+  return state.currencies || []
 }
