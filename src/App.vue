@@ -31,3 +31,13 @@
     }
   }
 </script>
+
+<style>
+  .toolbar {
+    background-color: #006fff !important;
+    color: #ffffff !important;
+  }
+  .toolbar__items > button {
+    color: #ffffff !important;
+  }
+</style>

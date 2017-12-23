@@ -1,95 +1,81 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="items"
-    hide-actions
-    item-key="name"
-  >
-    <template slot="items" slot-scope="props">
-      <tr @click="props.expanded = !props.expanded">
-        <td class="text-xs-center">{{ props.item.rank }}</td>
-        <td class="text-xs-left">{{ props.item.name }}</td>
-        <td class="text-xs-center">{{ props.item.symbol }}</td>
-        <td class="text-xs-right">{{ props.item.marketCap }}</td>
-        <td class="text-xs-right">{{ props.item.currentPrice }}</td>
-        <td class="text-xs-right">{{ props.item.volume24h }}</td>
-        <td class="text-xs-right">{{ props.item.percentChange1h }}</td>
-        <td class="text-xs-right">{{ props.item.percentChange24h }}</td>
-        <td class="text-xs-right">{{ props.item.percentChange7d }}</td>
-        <td class="text-xs-right">{{ props.item.maxPrice }}</td>
-        <td class="text-xs-right">{{ props.item.fairPrice }}</td>
-      </tr>
-    </template>
-    <template slot="expand" slot-scope="props">
-      <v-card flat>
-        <v-card-text>Other coin attributes, subjective valuation and comments</v-card-text>
-      </v-card>
-    </template>
-  </v-data-table>
+  <v-container fluid>
+  <v-card>
+    <v-card-title>
+      <v-spacer></v-spacer>
+      <v-text-field
+        append-icon="search"
+        label="Search"
+        single-line
+        hide-details
+        v-model="search"
+      ></v-text-field>
+    </v-card-title>
+    <v-data-table
+      :headers="headers"
+      :items="currencies"
+      :search="search"
+      hide-actions
+      item-key="name"
+      class="elevation-10"
+      dark
+    >
+      <template slot="items" slot-scope="props">
+        <tr @click="props.expanded = !props.expanded">
+          <td class="text-xs-center">{{ props.item.rank }}</td>
+          <td class="text-xs-left">{{ props.item.name }}</td>
+          <td class="text-xs-center">{{ props.item.symbol }}</td>
+          <td class="text-xs-right">{{ props.item.marketCap | round }}</td>
+          <td class="text-xs-right">{{ props.item.price | round }}</td>
+          <td class="text-xs-right">{{ props.item.volume24h | round }}</td>
+          <td class="text-xs-right">{{ props.item.percentChange1h | round }}</td>
+          <td class="text-xs-right">{{ props.item.percentChange24h | round }}</td>
+          <td class="text-xs-right">{{ props.item.percentChange7d | round }}</td>
+          <td class="text-xs-center">{{ props.item.liquidity }}</td>
+          <td class="text-xs-center">{{ props.item.inflationary | humanizeBoolean }}</td>
+          <td class="text-xs-right">{{ props.item.maxPrice | round }}</td>
+          <td class="text-xs-right">{{ props.item.fairPrice | round }}</td>
+        </tr>
+      </template>
+      <template slot="expand" slot-scope="props">
+        <v-card height="200px" flat>
+          <v-card-text>Other coin attributes, subjective valuation and comments</v-card-text>
+        </v-card>
+      </template>
+    </v-data-table>
+  </v-card>
+</v-container>
 </template>
 
 <script>
   export default {
     data () {
       return {
+        search: '',
         headers: [
-          { text: '#', value: 'rank' },
+          { text: '#', value: 'rank', align: 'center' },
           { text: 'Name', value: 'name', align: 'left' },
-          { text: 'Symbol', value: 'symbol' },
-          { text: 'Market Cap', value: 'marketCap' },
-          { text: 'Price', value: 'currentPrice' },
-          { text: 'Volume (24h)', value: 'volume24h' },
-          { text: '% 1h', value: 'percentChange1h' },
-          { text: '% 24h', value: 'percentChange24h' },
-          { text: '% 7d', value: 'percentChange7d' },
-          { text: 'Max Price', value: 'maxPrice' },
-          { text: 'Fair Price', value: 'fairPrice' }
-        ],
-        items: [
-          {
-            value: false,
-            rank: 1,
-            name: 'Bitcoin',
-            symbol: 'BTC',
-            marketCap: 261546262560,
-            currentPrice: 15609.6,
-            volume24h: 16977900000.0,
-            percentChange1h: 0.88,
-            percentChange24h: -7.29,
-            percentChange7d: -6.28,
-            maxPrice: 15609.6,
-            fairPrice: 15609.6
-          },
-          {
-            value: false,
-            rank: 2,
-            name: 'Ethereum',
-            symbol: 'ETH',
-            marketCap: 546262560,
-            currentPrice: 609.6,
-            volume24h: 9900000.0,
-            percentChange1h: 0.9,
-            percentChange24h: -2.29,
-            percentChange7d: -4.28,
-            maxPrice: 5609.6,
-            fairPrice: 4609.6
-          },
-          {
-            value: false,
-            rank: 3,
-            name: 'Litecoin',
-            symbol: 'LTC',
-            marketCap: 446262560,
-            currentPrice: 320.6,
-            volume24h: 8800000.0,
-            percentChange1h: 0.80,
-            percentChange24h: -6.29,
-            percentChange7d: -0.28,
-            maxPrice: 4888.6,
-            fairPrice: 4000.6
-          }
+          { text: 'Symbol', value: 'symbol', align: 'center' },
+          { text: 'Market Cap', value: 'marketCap', align: 'right' },
+          { text: 'Price', value: 'price', align: 'right' },
+          { text: 'Volume (24h)', value: 'volume24h', align: 'right' },
+          { text: '% 1h', value: 'percentChange1h', align: 'right' },
+          { text: '% 24h', value: 'percentChange24h', align: 'right' },
+          { text: '% 7d', value: 'percentChange7d', align: 'right' },
+          { text: 'Liquidity', value: 'liquidity', align: 'center' },
+          { text: 'Inflationary', value: 'inflationary', align: 'center' },
+          { text: 'Max Price', value: 'maxPrice', align: 'right' },
+          { text: 'Fair Price', value: 'fairPrice', align: 'right' }
         ]
       }
+    },
+    computed: {
+      currencies () {
+        return this.$store.getters.currencies
+      }
+    },
+    mounted () {
+      this.$store.dispatch('fetchCurrencies')
     }
   }
 </script>
