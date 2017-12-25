@@ -7,8 +7,8 @@ import * as mutations from './mutations'
 Vue.use(Vuex)
 
 const state = {
-  value: 0,
-  currencies: []
+  currencies: [],
+  valuationSettings: []
 }
 
 export const store = new Vuex.Store({
