@@ -105,6 +105,7 @@
             weight: this.weight
           }
           this.$store.dispatch('addValuationSetting', valuation)
+          this.clear()
         }
       },
       remove (valuationId) {
