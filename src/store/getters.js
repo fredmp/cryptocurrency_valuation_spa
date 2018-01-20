@@ -1,7 +1,3 @@
-export const currencies = state => {
-  return state.currencies || []
-}
+export const currencies = state => state.currencies || [];
 
-export const valuationSettings = state => {
-  return state.valuationSettings
-}
+export const valuationSettings = state => state.valuationSettings;

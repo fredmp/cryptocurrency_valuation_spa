@@ -23,23 +23,23 @@
 </template>
 
 <script>
-  import ValuationSettings from '@/components/ValuationSettings'
-  import Profile from '@/components/Profile'
+import ValuationSettings from '@/components/ValuationSettings';
+import Profile from '@/components/Profile';
 
-  export default {
-    data () {
-      return {
-        items: {
-          ValuationSettings: 'Valuation Settings',
-          Profile: 'Profile'
-        }
-      }
-    },
-    components: {
-      ValuationSettings,
-      Profile
-    }
-  }
+export default {
+  data() {
+    return {
+      items: {
+        ValuationSettings: 'Valuation Settings',
+        Profile: 'Profile',
+      },
+    };
+  },
+  components: {
+    ValuationSettings,
+    Profile,
+  },
+};
 </script>
 
 <style scoped>

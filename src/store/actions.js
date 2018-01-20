@@ -1,33 +1,37 @@
-import Axios from 'axios'
+import Axios from 'axios';
 
-export const fetchCurrencies = ({ commit }) => {
-  Axios.get('/currencies').then(function (response) {
-    commit('currencies', response.data)
-  }).catch(function (error) {
-    console.log(error)
-  })
-}
+export const fetchCurrencies = async ({ commit }) => {
+  try {
+    const response = await Axios.get('/currencies');
+    commit('currencies', response.data);
+  } catch (e) {
+    // Handle errors
+  }
+};
 
-export const fetchValuationSettings = ({ commit }) => {
-  Axios.get('/valuation-settings').then(function (response) {
-    commit('valuationSettings', response.data)
-  }).catch(function (error) {
-    console.log(error)
-  })
-}
+export const fetchValuationSettings = async ({ commit }) => {
+  try {
+    const response = await Axios.get('/valuation-settings');
+    commit('valuationSettings', response.data);
+  } catch (e) {
+    // Handle errors
+  }
+};
 
-export const addValuationSetting = ({ commit }, payload) => {
-  Axios.post('/valuation-settings', payload).then(function (response) {
-    commit('addValuationSetting', response.data)
-  }).catch(function (error) {
-    console.log(error)
-  })
-}
+export const addValuationSetting = async ({ commit }, payload) => {
+  try {
+    const response = await Axios.post('/valuation-settings', payload);
+    commit('addValuationSetting', response.data);
+  } catch (e) {
+    // Handle errors
+  }
+};
 
-export const removeValuationSetting = ({ commit }, payload) => {
-  Axios.delete(`/valuation-settings/${payload}`).then(function () {
-    commit('removeValuationSetting', payload)
-  }).catch(function (error) {
-    console.log(error)
-  })
-}
+export const removeValuationSetting = async ({ commit }, payload) => {
+  try {
+    await Axios.delete(`/valuation-settings/${payload}`);
+    commit('removeValuationSetting', payload);
+  } catch (e) {
+    // Handle errors
+  }
+};

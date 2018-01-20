@@ -1,20 +1,20 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import * as actions from './actions'
-import * as getters from './getters'
-import * as mutations from './mutations'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import * as actions from './actions';
+import * as getters from './getters';
+import * as mutations from './mutations';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const state = {
   currencies: [],
-  valuationSettings: []
-}
+  valuationSettings: [],
+};
 
-export const store = new Vuex.Store({
+export default new Vuex.Store({
   state,
   getters,
   mutations,
   actions,
-  strict: process.env.NODE_ENV !== 'production'
-})
+  strict: process.env.NODE_ENV !== 'production',
+});

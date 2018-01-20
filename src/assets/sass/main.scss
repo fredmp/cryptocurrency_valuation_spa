@@ -1,0 +1,138 @@
+@import '~bulma/bulma';
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: lighter;
+  font-style: normal;
+  src: url('../../assets/fonts/Montserrat-Light.ttf') format('ttf');
+};
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: normal;
+  font-style: normal;
+  src: url('../../assets/fonts/Montserrat-Regular.ttf') format('ttf');
+};
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: normal;
+  font-style: italic;
+  src: url('../../assets/fonts/Montserrat-Italic.ttf') format('ttf');
+};
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: bold;
+  font-style: normal;
+  src: url('../../assets/fonts/Montserrat-Medium.ttf') format('ttf');
+};
+
+@font-face {
+  font-family: 'Montserrat';
+  font-weight: bolder;
+  font-style: normal;
+  src: url('../../assets/fonts/Montserrat-ExtraBold.ttf') format('ttf');
+};
+
+
+
+
+@font-face {
+  font-family: 'Roboto';
+  font-weight: lighter;
+  font-style: normal;
+  src: url('../../assets/fonts/Roboto-Light.ttf') format('ttf');
+};
+
+@font-face {
+  font-family: 'Roboto';
+  font-weight: normal;
+  font-style: normal;
+  src: url('../../assets/fonts/Roboto-Regular.ttf') format('ttf');
+};
+
+@font-face {
+  font-family: 'Roboto';
+  font-weight: normal;
+  font-style: italic;
+  src: url('../../assets/fonts/Roboto-Italic.ttf') format('ttf');
+};
+
+@font-face {
+  font-family: 'Roboto';
+  font-weight: bold;
+  font-style: normal;
+  src: url('../../assets/fonts/Roboto-Medium.ttf') format('ttf');
+};
+
+@font-face {
+  font-family: 'Roboto';
+  font-weight: bolder;
+  font-style: normal;
+  src: url('../../assets/fonts/Roboto-Bold.ttf') format('ttf');
+};
+
+
+body {
+  font-family: Roboto, sans-serif;
+  font-size: 15px;
+  font-weight: normal;
+  line-height: 20px;
+  text-rendering: optimizeLegibility;
+};
+
+.title {
+  box-sizing: border-box;
+  color: rgb(255, 255, 255);
+  display: block;
+  font-family: Roboto, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  height: 30px;
+  letter-spacing: 0.4px;
+  line-height: 30px;
+  margin-bottom: 0px;
+  margin-left: 16px;
+  margin-right: 0px;
+  margin-top: 0px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px;
+  text-overflow: ellipsis;
+  text-transform: none;
+  text-size-adjust: 100%;
+  white-space: nowrap;
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+a.navbar-item {
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  text-transform: uppercase;
+
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  line-height: 30px;
+  text-overflow: ellipsis;
+  text-size-adjust: 100%;
+  white-space: nowrap;
+  -webkit-box-direction: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+th {
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 18px;
+  line-height: 1.5;
+  color: rgba(0,0,0,.54);
+}
