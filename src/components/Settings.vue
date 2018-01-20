@@ -1,25 +1,21 @@
 <template>
-  <v-tabs fixed centered>
-    <v-tabs-bar>
-      <v-tabs-slider></v-tabs-slider>
-      <v-tabs-item
-        v-for="(item, key, index) in items"
-        :key="index"
-        :href="'#tab-' + index"
-      >
-        {{ item }}
-      </v-tabs-item>
-    </v-tabs-bar>
-    <v-tabs-items>
-      <v-tabs-content
-        v-for="(item, key, index) in items"
-        :key="index"
-        :id="'tab-' + index"
-      >
-        <component :is="key"></component>
-      </v-tabs-content>
-    </v-tabs-items>
-  </v-tabs>
+  <div class="block">
+    <div class="tabs is-centered">
+      <ul>
+        <li :class="{ 'is-active': currentComponent === 'valuation-settings' }">
+          <a @click="currentComponent = 'valuation-settings'">
+            Valuation Settings
+          </a>
+        </li>
+        <li :class="{ 'is-active': currentComponent === 'profile' }">
+          <a @click="currentComponent = 'profile'">
+            Profile
+          </a>
+        </li>
+      </ul>
+    </div>
+    <component :is="currentComponent"></component>
+  </div>
 </template>
 
 <script>
@@ -33,6 +29,7 @@ export default {
         ValuationSettings: 'Valuation Settings',
         Profile: 'Profile',
       },
+      currentComponent: 'valuation-settings',
     };
   },
   components: {
@@ -43,4 +40,7 @@ export default {
 </script>
 
 <style scoped>
+.tabs {
+  margin-top: 20px;
+}
 </style>

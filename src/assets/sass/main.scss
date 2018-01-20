@@ -136,3 +136,32 @@ th {
   line-height: 1.5;
   color: rgba(0,0,0,.54);
 }
+
+.table {
+  min-width: 600px;
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+.table-div {
+  white-space:nowrap;
+  overflow: hidden;
+}
+.table-text {
+  font-size: 13px;
+  height: 40px;
+  line-height: 20px;
+  vertical-align: middle;
+}
+.table-header {
+  color: rgba(0, 0, 0, 0.565);
+}
+th > td {
+  color: rgba(0, 0, 0, 0.54);
+  display: block;
+  border-bottom-width: 0 !important;
+}
+td {
+  padding-top: 10px !important;
+}

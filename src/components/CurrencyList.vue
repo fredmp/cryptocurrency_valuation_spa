@@ -131,24 +131,4 @@ export default {
   .search-bar {
     width: 300px;
   }
-  .table {
-    min-width: 600px;
-    overflow-x: auto;
-    background: #fff;
-    border-radius: 2px;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-  }
-  .table-div {
-    white-space:nowrap;
-    overflow: hidden;
-  }
-  .table-text {
-    font-size: 13px;
-    height: 40px;
-    line-height: 20px;
-    vertical-align: middle;
-  }
-  .table-header {
-    color: rgba(0, 0, 0, 0.565);
-  }
 </style>
