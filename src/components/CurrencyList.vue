@@ -13,7 +13,9 @@
                 placeholder="Search...">
             </p>
             <p class="control">
-              <a class="button is-info" @click="filter()">Search</a>
+              <a class="button is-info" @click="filter()">
+                <icon name="search" label="Search"></icon>
+              </a>
             </p>
           </div>
         </div>
