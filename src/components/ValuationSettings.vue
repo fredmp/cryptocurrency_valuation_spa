@@ -1,8 +1,39 @@
 <template>
   <div class="block">
+    <div class="box">
+      <article class="media">
+        <div class="media-left">
+          <div>
+            <icon
+              name="exclamation-circle"
+              class="is-warning"
+              label="Info"
+              scale=2>
+            </icon>
+          </div>
+        </div>
+        <div class="media-content">
+          <div class="content">
+            <p>
+              Each setting defines a penalty applied to the fair price.
+              The max value represents no penalty.
+              Any other value represents a penalty based on the weight.
+            </p>
+            <p>
+              For example: max value 5 and weight 20
+              <icon name="long-arrow-right" label="Arrow"></icon>
+              each part is <pre>20 / 5 = 4%</pre>.
+              If you select 2 for a coin the fair price will be 12% less
+              <pre>((5 - 2) * 4)</pre>.
+            </p>
+          </div>
+        </div>
+      </article>
+    </div>
     <div class="block">
       <nav class="level">
-        <div class="level-left"></div>
+        <div class="level-left">
+        </div>
         <div class="level-right">
           <a class="button is-info" @click="modal = true">Add</a>
         </div>
@@ -23,9 +54,14 @@
                 <td class="table-text has-text-left">{{ v.description }}</td>
                 <td class="table-text has-text-centered">{{ v.from }}</td>
                 <td class="table-text has-text-centered">{{ v.to }}</td>
-                <td class="table-text has-text-centered">{{ v.weight }}</td>
-                <td class="table-text has-text-centered">{{ v.liquidity }}
-                  <a @click.capture="remove(v.id)">
+                <td class="table-text has-text-centered">{{ v.weight }} %</td>
+                <td class="table-text has-text-centered is-short">
+                  <a class="is-info">
+                    <icon name="edit" label="Edit"></icon>
+                  </a>
+                </td>
+                <td class="table-text has-text-centered is-short">
+                  <a @click.capture="remove(v.id)" class="is-danger">
                     <icon name="times" label="Remove"></icon>
                   </a>
                 </td>
@@ -83,7 +119,7 @@
               <div class="control">
                 <input
                   v-model="weight"
-                  class="input short-input"
+                  class="input is-short"
                   type="text"
                   placeholder="Weight"
                   required>
@@ -119,6 +155,7 @@ export default {
       { text: 'From', value: 'from', align: 'centered' },
       { text: 'To', value: 'to', align: 'centered' },
       { text: 'Weight', value: 'weight', align: 'centered' },
+      { text: 'Edit', value: 'edit', align: 'centered' },
       { text: 'Remove', value: 'remove', align: 'centered' },
     ],
   }),
@@ -172,7 +209,41 @@ export default {
   tr td:first-child {
     padding-left: 10px;
   }
-  .short-input {
+  input.is-short {
     width: 180px;
+  }
+  td.is-short {
+    width: 50px;
+  }
+  td > a.is-danger {
+    color: #ff3860;
+  }
+  td > a.is-info {
+    color: #209cee;
+  }
+  svg.is-warning {
+    color: #ffdd57;
+    display: block;
+  }
+  .media-left {
+    margin: auto;
+    margin-right: 15px;
+  }
+  .media-content {
+    margin: auto;
+  }
+  .content > p {
+    margin: auto;
+  }
+  .content > p > pre {
+    padding: 0px;
+    margin: 0px;
+    display: inline;
+  }
+  .content > p > svg {
+    padding: 0px;
+    margin: 0px;
+    display: inline;
+    vertical-align: middle;
   }
 </style>
