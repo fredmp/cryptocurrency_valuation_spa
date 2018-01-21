@@ -1,5 +1,5 @@
 <template>
-  <div class="block">
+  <div class="block main">
     <div class="box">
       <article class="media">
         <div class="media-left">
@@ -52,8 +52,7 @@
             <tbody>
               <tr v-for="v in valuations" :key="v.description">
                 <td class="table-text has-text-left">{{ v.description }}</td>
-                <td class="table-text has-text-centered">{{ v.from }}</td>
-                <td class="table-text has-text-centered">{{ v.to }}</td>
+                <td class="table-text has-text-centered">{{ v.maxValue }}</td>
                 <td class="table-text has-text-centered">{{ v.weight }} %</td>
                 <td class="table-text has-text-centered is-short">
                   <a class="is-info">
@@ -91,23 +90,11 @@
               </div>
             </div>
             <div class="field">
-              <label class="label">From</label>
+              <label class="label">Max Value</label>
               <div class="control">
                 <div class="select">
                   <select
-                    v-model="initialRange"
-                    required>
-                    <option v-for="i in items" :key="i" :value="i">{{ i }}</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="field">
-              <label class="label">To</label>
-              <div class="control">
-                <div class="select">
-                  <select
-                    v-model="finalRange"
+                    v-model="maxValue"
                     required>
                     <option v-for="i in items" :key="i" :value="i">{{ i }}</option>
                   </select>
@@ -138,37 +125,36 @@
         </footer>
       </div>
     </div>
+    <div class="chart">
+      <doughnut-chart :label="'Valuation Settings'" :elements="chartElements"></doughnut-chart>
+    </div>
   </div>
 </template>
 
 <script>
+import DoughnutChart from '@/components/utils/DoughnutChart';
+
 export default {
   data: () => ({
     modal: false,
     description: '',
     weight: '',
-    initialRange: null,
-    finalRange: null,
+    maxValue: null,
     items: [1, 2, 3, 4, 5],
     headers: [
       { text: 'Description', value: 'description', align: 'left' },
-      { text: 'From', value: 'from', align: 'centered' },
-      { text: 'To', value: 'to', align: 'centered' },
+      { text: 'Max Value', value: 'maxValue', align: 'centered' },
       { text: 'Weight', value: 'weight', align: 'centered' },
       { text: 'Edit', value: 'edit', align: 'centered' },
       { text: 'Remove', value: 'remove', align: 'centered' },
     ],
   }),
   methods: {
-    validateRange() {
-      return !!this.initialRange && !!this.finalRange && this.initialRange < this.finalRange;
-    },
     add() {
       if (!this.valid) return;
       const valuation = {
         description: this.description,
-        from: this.initialRange,
-        to: this.finalRange,
+        maxValue: this.maxValue,
         weight: this.weight,
       };
       this.$store.dispatch('addValuationSetting', valuation);
@@ -179,10 +165,17 @@ export default {
     },
     clear() {
       this.description = '';
-      this.initialRange = null;
-      this.finalRange = null;
+      this.maxValue = null;
       this.weight = '';
       this.modal = false;
+    },
+    generateColor(index) {
+      const colors = [
+        '27BDDB', 'FF455A', '32CD90', '5330A2', 'FFDD52', '077187', 'F4F1BB', '74A57F',
+        '9ECE9A', 'E4C5AF', 'ED6A5A', '9BC1BC', '5CA4A9', '074F57', 'E6EBE0', 'DCEDFF',
+        '94B0DA', '8F91A2', 'A63446', '58B09C', 'F3B3A6', '1282A2', '62929E', 'DB5461',
+      ];
+      return `${index < 24 ? colors[index] : this.generateColor(index - 24)}`;
     },
   },
   computed: {
@@ -190,11 +183,23 @@ export default {
       return this.$store.getters.valuationSettings;
     },
     valid() {
-      return this.validateRange() && this.description.length > 0 && this.weight.length > 0;
+      return typeof this.maxValue === 'number' &&
+        this.maxValue > 0 && this.description.length > 0 && this.weight.length > 0;
+    },
+    chartElements() {
+      return this.valuations.map(
+        (value, index) => ({
+          label: value.description,
+          color: `#${this.generateColor(index)}`,
+          data: value.weight,
+        }));
     },
   },
   mounted() {
     this.$store.dispatch('fetchValuationSettings');
+  },
+  components: {
+    DoughnutChart,
   },
 };
 </script>
@@ -245,5 +250,12 @@ export default {
     margin: 0px;
     display: inline;
     vertical-align: middle;
+  }
+  .main {
+    padding-bottom: 150px;
+  }
+  div.chart {
+    max-width: 40%;
+    margin: auto;
   }
 </style>
