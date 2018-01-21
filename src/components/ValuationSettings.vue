@@ -51,6 +51,7 @@
             </thead>
             <tbody>
               <tr v-for="v in valuations" :key="v.description">
+                <td class="table-text has-text-left">{{ v.name }}</td>
                 <td class="table-text has-text-left">{{ v.description }}</td>
                 <td class="table-text has-text-centered">{{ v.maxValue }}</td>
                 <td class="table-text has-text-centered">{{ v.weight }} %</td>
@@ -79,14 +80,24 @@
         <section class="modal-card-body">
           <form ref="form" lazy-validation>
             <div class="field">
+              <label class="label">Name</label>
+              <div class="control">
+                <input
+                  v-model="name"
+                  class="input"
+                  type="text"
+                  placeholder="Name"
+                  required>
+              </div>
+            </div>
+            <div class="field">
               <label class="label">Description</label>
               <div class="control">
                 <input
                   v-model="description"
                   class="input"
                   type="text"
-                  placeholder="Description"
-                  required>
+                  placeholder="Description">
               </div>
             </div>
             <div class="field">
@@ -137,11 +148,13 @@ import DoughnutChart from '@/components/utils/DoughnutChart';
 export default {
   data: () => ({
     modal: false,
+    name: '',
     description: '',
     weight: '',
     maxValue: null,
     items: [1, 2, 3, 4, 5],
     headers: [
+      { text: 'Name', value: 'name', align: 'left' },
       { text: 'Description', value: 'description', align: 'left' },
       { text: 'Max Value', value: 'maxValue', align: 'centered' },
       { text: 'Weight', value: 'weight', align: 'centered' },
@@ -153,6 +166,7 @@ export default {
     add() {
       if (!this.valid) return;
       const valuation = {
+        name: this.name,
         description: this.description,
         maxValue: this.maxValue,
         weight: this.weight,
@@ -164,6 +178,7 @@ export default {
       this.$store.dispatch('removeValuationSetting', valuationId);
     },
     clear() {
+      this.name = '';
       this.description = '';
       this.maxValue = null;
       this.weight = '';
@@ -184,12 +199,12 @@ export default {
     },
     valid() {
       return typeof this.maxValue === 'number' &&
-        this.maxValue > 0 && this.description.length > 0 && this.weight.length > 0;
+        this.maxValue > 0 && this.name.length > 0 && this.weight.length > 0;
     },
     chartElements() {
       return this.valuations.map(
         (value, index) => ({
-          label: value.description,
+          label: value.name,
           color: `#${this.generateColor(index)}`,
           data: value.weight,
         }));
