@@ -35,7 +35,7 @@
         <div class="level-left">
         </div>
         <div class="level-right">
-          <a class="button is-info" @click="modal = true">Add</a>
+          <a class="button is-info" @click="add()">Add</a>
         </div>
       </nav>
     </div>
@@ -56,7 +56,7 @@
                 <td class="table-text has-text-centered">{{ v.maxValue }}</td>
                 <td class="table-text has-text-centered">{{ v.weight }} %</td>
                 <td class="table-text has-text-centered is-short">
-                  <a class="is-info">
+                  <a @click.capture="edit(v.id)" class="is-info">
                     <icon name="edit" label="Edit"></icon>
                   </a>
                 </td>
@@ -83,7 +83,7 @@
               <label class="label">Name</label>
               <div class="control">
                 <input
-                  v-model="name"
+                  v-model="valuation.name"
                   class="input"
                   type="text"
                   placeholder="Name"
@@ -94,7 +94,7 @@
               <label class="label">Description</label>
               <div class="control">
                 <input
-                  v-model="description"
+                  v-model="valuation.description"
                   class="input"
                   type="text"
                   placeholder="Description">
@@ -105,7 +105,7 @@
               <div class="control">
                 <div class="select">
                   <select
-                    v-model="maxValue"
+                    v-model="valuation.maxValue"
                     required>
                     <option v-for="i in items" :key="i" :value="i">{{ i }}</option>
                   </select>
@@ -116,7 +116,7 @@
               <label class="label">Weight</label>
               <div class="control">
                 <input
-                  v-model="weight"
+                  v-model="valuation.weight"
                   class="input is-short"
                   type="text"
                   placeholder="Weight"
@@ -127,7 +127,7 @@
         </section>
         <footer class="modal-card-foot">
           <button
-            @click="add"
+            @click="save"
             :disabled="!valid"
             class="button is-info">
             Save changes
@@ -148,10 +148,7 @@ import DoughnutChart from '@/components/utils/DoughnutChart';
 export default {
   data: () => ({
     modal: false,
-    name: '',
-    description: '',
-    weight: '',
-    maxValue: null,
+    valuation: { name: '', description: '', maxValue: '', weight: '' },
     items: [1, 2, 3, 4, 5],
     headers: [
       { text: 'Name', value: 'name', align: 'left' },
@@ -164,25 +161,30 @@ export default {
   }),
   methods: {
     add() {
+      this.modal = true;
+      this.valuation = { name: '', description: '', maxValue: '', weight: '' };
+    },
+    save() {
       if (!this.valid) return;
-      const valuation = {
-        name: this.name,
-        description: this.description,
-        maxValue: this.maxValue,
-        weight: this.weight,
-      };
-      this.$store.dispatch('addValuationSetting', valuation);
+      if (this.valuation.id) {
+        this.$store.dispatch('updateValuationSetting', this.valuation);
+      } else {
+        this.$store.dispatch('addValuationSetting', this.valuation);
+      }
       this.clear();
     },
     remove(valuationId) {
       this.$store.dispatch('removeValuationSetting', valuationId);
     },
+    edit(valuationId) {
+      const found = this.valuations.find(v => v.id === valuationId);
+      const { id, name, description, maxValue, weight } = found;
+      this.valuation = { id, name, description, maxValue, weight };
+      this.modal = true;
+    },
     clear() {
-      this.name = '';
-      this.description = '';
-      this.maxValue = null;
-      this.weight = '';
       this.modal = false;
+      this.valuation = { name: '', description: '', maxValue: '', weight: '' };
     },
     generateColor(index) {
       const colors = [
@@ -198,8 +200,10 @@ export default {
       return this.$store.getters.valuationSettings;
     },
     valid() {
-      return typeof this.maxValue === 'number' &&
-        this.maxValue > 0 && this.name.length > 0 && this.weight.length > 0;
+      return typeof this.valuation.maxValue === 'number' &&
+        this.valuation.maxValue > 0 &&
+        this.valuation.name.length > 0 &&
+        this.valuation.weight.length > 0;
     },
     chartElements() {
       return this.valuations.map(

@@ -27,6 +27,15 @@ export const addValuationSetting = async ({ commit }, payload) => {
   }
 };
 
+export const updateValuationSetting = async ({ commit }, payload) => {
+  try {
+    const response = await Axios.put(`/valuation-settings/${payload.id}`, payload);
+    commit('updateValuationSetting', response.data);
+  } catch (e) {
+    // Handle errors
+  }
+};
+
 export const removeValuationSetting = async ({ commit }, payload) => {
   try {
     await Axios.delete(`/valuation-settings/${payload}`);
