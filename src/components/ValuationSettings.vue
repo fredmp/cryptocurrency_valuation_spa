@@ -141,7 +141,10 @@ export default {
       this.$store.dispatch('removeValuationSetting', valuationId);
     },
     clear() {
-      this.$refs.form.reset();
+      this.description = '';
+      this.initialRange = null;
+      this.finalRange = null;
+      this.weight = '';
       this.modal = false;
     },
   },
