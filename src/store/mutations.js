@@ -2,6 +2,14 @@ export const currencies = (state, payload) => {
   state.currencies = payload;
 };
 
+export const tracked = (state, payload) => {
+  state.tracked = payload;
+};
+
+export const trackedCurrencyIds = (state, payload) => {
+  state.trackedCurrencyIds = payload;
+};
+
 export const valuationSettings = (state, payload) => {
   state.valuationSettings = payload;
 };
@@ -22,4 +30,9 @@ export const updateValuationSetting = (state, { id, name, description, maxValue,
 
 export const removeValuationSetting = (state, payload) => {
   state.valuationSettings = state.valuationSettings.filter(e => e.id !== payload);
+};
+
+export const menuTrackedCoinsHighlight = (state, payload) => {
+  state.appConfig.menuTrackedCoinsHighlight = payload;
+  state.appConfig = JSON.parse(JSON.stringify(state.appConfig));
 };
