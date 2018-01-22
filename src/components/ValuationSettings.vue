@@ -68,6 +68,7 @@
               </tr>
             </tbody>
           </table>
+          <spinner :show="loading"></spinner>
       </div>
     </div>
     <div :class="{ 'modal': true, 'is-active': modal}">
@@ -144,12 +145,14 @@
 
 <script>
 import DoughnutChart from '@/components/utils/DoughnutChart';
+import Spinner from '@/components/utils/Spinner';
 
 export default {
   data: () => ({
     modal: false,
     valuation: { name: '', description: '', maxValue: '', weight: '' },
     items: [1, 2, 3, 4, 5],
+    loading: false,
     headers: [
       { text: 'Name', value: 'name', align: 'left' },
       { text: 'Description', value: 'description', align: 'left' },
@@ -215,10 +218,14 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('fetchValuationSettings');
+    this.loading = true;
+    this.$store.dispatch('fetchValuationSettings').then(() => {
+      this.loading = false;
+    });
   },
   components: {
     DoughnutChart,
+    Spinner,
   },
 };
 </script>

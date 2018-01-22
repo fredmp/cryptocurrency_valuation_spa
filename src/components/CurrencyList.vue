@@ -23,38 +23,40 @@
     </div>
     <div class="block">
       <table class="table is-striped is-narrow is-hoverable is-fullwidth">
-          <thead>
-            <th v-for="h in headers" :key="h.value">
-              <td :id="h.value" :class="'table-header table-text has-text-' + h.align">
-                <a @click="orderBy(h.value)">{{ h.text }}</a>
-              </td>
-            </th>
-          </thead>
-          <tbody>
-            <tr v-for="c in orderedCurrencies" :key="c.name">
-              <td class="table-text has-text-centered">{{ c.rank }}</td>
-              <td class="table-text has-text-left">{{ c.name }}</td>
-              <td class="table-text has-text-centered">{{ c.symbol }}</td>
-              <td class="table-text has-text-right">{{ c.marketCap | round }}</td>
-              <td class="table-text has-text-right">{{ c.price | round }}</td>
-              <td class="table-text has-text-right">{{ c.volume24h | round }}</td>
-              <td class="table-text has-text-right">{{ c.percentChange1h | round }}</td>
-              <td class="table-text has-text-right">{{ c.percentChange24h | round }}</td>
-              <td class="table-text has-text-right">{{ c.percentChange7d | round }}</td>
-              <td class="table-text has-text-centered">{{ c.liquidity }}</td>
-              <td class="table-text has-text-centered">{{ c.inflationary | humanizeBoolean }}</td>
-              <td class="table-text has-text-right">{{ c.maxPrice | round }}</td>
-              <td class="table-text has-text-right">{{ c.fairPrice | round }}</td>
-              <td class="table-text has-text-right">{{ c.growthPotential | round }} %</td>
-            </tr>
-          </tbody>
-        </table>
+        <thead>
+          <th v-for="h in headers" :key="h.value">
+            <td :id="h.value" :class="'table-header table-text has-text-' + h.align">
+              <a @click="orderBy(h.value)">{{ h.text }}</a>
+            </td>
+          </th>
+        </thead>
+        <tbody>
+          <tr v-for="c in orderedCurrencies" :key="c.name">
+            <td class="table-text has-text-centered">{{ c.rank }}</td>
+            <td class="table-text has-text-left">{{ c.name }}</td>
+            <td class="table-text has-text-centered">{{ c.symbol }}</td>
+            <td class="table-text has-text-right">{{ c.marketCap | round }}</td>
+            <td class="table-text has-text-right">{{ c.price | round }}</td>
+            <td class="table-text has-text-right">{{ c.volume24h | round }}</td>
+            <td class="table-text has-text-right">{{ c.percentChange1h | round }}</td>
+            <td class="table-text has-text-right">{{ c.percentChange24h | round }}</td>
+            <td class="table-text has-text-right">{{ c.percentChange7d | round }}</td>
+            <td class="table-text has-text-centered">{{ c.liquidity }}</td>
+            <td class="table-text has-text-centered">{{ c.inflationary | humanizeBoolean }}</td>
+            <td class="table-text has-text-right">{{ c.maxPrice | round }}</td>
+            <td class="table-text has-text-right">{{ c.fairPrice | round }}</td>
+            <td class="table-text has-text-right">{{ c.growthPotential | round }} %</td>
+          </tr>
+        </tbody>
+      </table>
+      <spinner :show="loading"></spinner>
     </div>
   </div>
 </template>
 
 <script>
 import _ from 'lodash';
+import Spinner from '@/components/utils/Spinner';
 
 export default {
   data() {
@@ -79,6 +81,7 @@ export default {
       orderedCurrencies: [],
       orderedBy: {},
       filterBy: '',
+      loading: false,
     };
   },
   watch: {
@@ -117,9 +120,14 @@ export default {
     },
   },
   mounted() {
+    this.loading = true;
     this.$store.dispatch('fetchCurrencies').then(() => {
       this.orderBy('rank');
+      this.loading = false;
     });
+  },
+  components: {
+    Spinner,
   },
 };
 </script>
