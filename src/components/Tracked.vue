@@ -22,6 +22,35 @@
     </nav>
   </div>
   <div class="block">
+    <div :class="{ 'modal': true, 'is-active': modal}">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">
+            <img :src="icon" :alt="selected.currency.name">
+            <span>{{ selected.currency.symbol }} - {{ selected.currency.name }}</span>
+          </p>
+          <button class="delete" aria-label="close" @click="closeModal"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="tabs is-centered">
+            <ul>
+              <li class="is-active"><a>Info</a></li>
+              <li><a>Valuations</a></li>
+              <li><a>Comments</a></li>
+            </ul>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button
+            @click="save()"
+            class="button is-info">
+            Save
+          </button>
+          <button class="button" @click="closeModal">Close</button>
+        </footer>
+      </div>
+    </div>
     <table class="table is-striped is-narrow is-hoverable is-fullwidth">
       <thead>
         <th v-for="h in headers" :key="h.value">
@@ -31,7 +60,7 @@
         </th>
       </thead>
       <tbody>
-        <tr v-for="t in orderedTracked" :key="t.id">
+        <tr v-for="t in orderedTracked" :key="t.id" @click="openModal(t)">
           <td class="table-text has-text-centered">{{ t.currency.rank }}</td>
           <td class="table-text has-text-left">{{ t.currency.name }}</td>
           <td class="table-text has-text-centered">{{ t.currency.symbol }}</td>
@@ -61,6 +90,8 @@ export default {
   data() {
     return {
       loading: false,
+      modal: false,
+      icon: '',
       search: '',
       headers: [
         { text: '#', value: 'rank', align: 'centered' },
@@ -76,7 +107,7 @@ export default {
         { text: 'Fair Price', value: 'fairPrice', align: 'centered' },
         { text: 'Growth Potential', value: 'growthPotential', align: 'centered' },
       ],
-      selected: {},
+      selected: { currency: {} },
       orderedBy: {},
       filterBy: '',
       orderedTracked: [],
@@ -88,6 +119,18 @@ export default {
     },
   },
   methods: {
+    save() {
+      // Save
+    },
+    openModal(trackedCurrency) {
+      this.selected = trackedCurrency;
+      this.icon = this.currencyIcon();
+      this.modal = true;
+    },
+    closeModal() {
+      this.selected = { currency: {} };
+      this.modal = false;
+    },
     orderBy(field) {
       const textFields = ['name', 'symbol'];
       // const directFields = ['valuation'];
@@ -99,7 +142,7 @@ export default {
       this.orderedTracked = _.orderBy(
         this.tracked,
         (obj) => {
-          const isText = textFields.includes(obj[this.orderedBy.field]);
+          const isText = textFields.includes(this.orderedBy.field);
           return isText ?
             obj.currency[this.orderedBy.field] : parseInt(obj.currency[this.orderedBy.field], 10);
         },
@@ -114,6 +157,15 @@ export default {
           (t[key] || '').toString().toLowerCase().includes(this.filterBy.toLowerCase()) ||
           (t.currency[key] || '').toString().toLowerCase().includes(this.filterBy.toLowerCase()));
       });
+    },
+    currencyIcon() {
+      let src = '';
+      try {
+        src = this.selected.currency.name.replace(/\s/g, '-').toLowerCase();
+        return `https://files.coinmarketcap.com/static/img/coins/32x32/${src}.png`;
+      } catch (e) {
+        return '';
+      }
     },
   },
   computed: {
@@ -141,5 +193,15 @@ export default {
 }
 .search-bar {
   width: 300px;
+}
+.modal-card-title {
+  padding: 4px;
+}
+.modal-card-title > img {
+  vertical-align: middle;
+}
+.modal-card-title > span {
+  vertical-align: middle;
+  margin-left: 10px;
 }
 </style>

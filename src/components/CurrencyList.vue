@@ -131,7 +131,7 @@ export default {
       this.orderedCurrencies = _.orderBy(
         this.currencies,
         (obj) => {
-          const isText = textFields.includes(obj[this.orderedBy.field]);
+          const isText = textFields.includes(this.orderedBy.field);
           return isText ? obj[this.orderedBy.field] : parseInt(obj[this.orderedBy.field], 10);
         },
         this.orderedBy.order,
