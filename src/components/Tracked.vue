@@ -37,9 +37,10 @@
             <ul>
               <li class="is-active"><a>Info</a></li>
               <li><a>Valuations</a></li>
-              <li><a>Comments</a></li>
+              <li><a>Notes</a></li>
             </ul>
           </div>
+          <tracked-info :selected="selected"></tracked-info>
         </section>
         <footer class="modal-card-foot">
           <button
@@ -84,6 +85,7 @@
 <script>
 import _ from 'lodash';
 import Spinner from '@/components/utils/Spinner';
+import TrackedInfo from '@/components/TrackedInfo';
 
 export default {
   name: 'Tracked',
@@ -182,6 +184,7 @@ export default {
   },
   components: {
     Spinner,
+    TrackedInfo,
   },
 };
 </script>

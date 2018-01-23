@@ -12,6 +12,12 @@ import store from './store/index';
 
 require('./assets/sass/main.scss');
 
+const formatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+});
+
 if (process.env.NODE_ENV === 'production') {
   Axios.defaults.baseURL = 'https://crypto-currency-valuation-api.herokuapp.com/';
 } else {
@@ -34,6 +40,14 @@ Vue.filter('humanizeBoolean', function (value) {
     return '';
   }
   return value ? 'Yes' : 'No';
+});
+
+Vue.filter('money', function (value) {
+  try {
+    return formatter.format(value);
+  } catch (e) {
+    return value;
+  }
 });
 
 Vue.config.productionTip = false;
