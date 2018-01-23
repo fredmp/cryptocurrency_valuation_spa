@@ -8,7 +8,12 @@ Vue.use(Vuex);
 
 const state = {
   currencies: [],
+  tracked: [],
+  trackedCurrencyIds: [],
   valuationSettings: [],
+  appConfig: {
+    menuTrackedCoinsHighlight: false,
+  },
 };
 
 export default new Vuex.Store({

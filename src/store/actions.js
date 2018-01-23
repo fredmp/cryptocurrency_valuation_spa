@@ -1,5 +1,9 @@
 import Axios from 'axios';
 
+const hasErrorMessage = function (e) {
+  return e.response && e.response.data && e.response.data.message;
+};
+
 export const fetchCurrencies = async ({ commit }) => {
   try {
     const response = await Axios.get('/currencies');
@@ -43,4 +47,41 @@ export const removeValuationSetting = async ({ commit }, payload) => {
   } catch (e) {
     // Handle errors
   }
+};
+
+export const fetchTrackedCurrencyIds = async ({ commit }) => {
+  try {
+    const response = await Axios.get('/tracked/ids');
+    commit('trackedCurrencyIds', response.data);
+  } catch (e) {
+    // Handle errors
+  }
+};
+
+export const fetchTracked = async ({ commit }) => {
+  try {
+    const response = await Axios.get('/tracked');
+    commit('tracked', response.data);
+  } catch (e) {
+    // Handle errors
+  }
+};
+
+// eslint-disable-next-line no-unused-vars
+export const track = async ({ commit }, payload) => {
+  try {
+    await Axios.post('/tracked', payload);
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};
+
+export const hightLightTrackedCoinsMenu = ({ commit }) => {
+  commit('menuTrackedCoinsHighlight', true);
+  setTimeout(function () {
+    commit('menuTrackedCoinsHighlight', false);
+  }, 2500);
 };

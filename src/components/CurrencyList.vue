@@ -22,6 +22,30 @@
       </nav>
     </div>
     <div class="block">
+      <div :class="{ 'modal': true, 'is-active': modal}">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Track {{ selected.symbol }}</p>
+            <button class="delete" aria-label="close" @click="closeModal"></button>
+          </header>
+          <section class="modal-card-body">
+            Do you want to monitor {{ selected.name }}?
+            <div class="notification is-danger" v-show="trackErrorMessage.length > 0">
+              <button class="delete" @click="trackErrorMessage = ''"></button>
+              {{ trackErrorMessage }}
+            </div>
+          </section>
+          <footer class="modal-card-foot">
+            <button
+              @click="track()"
+              class="button is-info">
+              Confirm
+            </button>
+            <button class="button" @click="closeModal">Cancel</button>
+          </footer>
+        </div>
+      </div>
       <table class="table is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
           <th v-for="h in headers" :key="h.value">
@@ -31,7 +55,11 @@
           </th>
         </thead>
         <tbody>
-          <tr v-for="c in orderedCurrencies" :key="c.name">
+          <tr
+            v-for="c in orderedCurrencies"
+            @click="openModal(c)"
+            :key="c.name"
+            :class="{ 'tracked': trackedCurrencyIds.includes(c.id) }">
             <td class="table-text has-text-centered">{{ c.rank }}</td>
             <td class="table-text has-text-left">{{ c.name }}</td>
             <td class="table-text has-text-centered">{{ c.symbol }}</td>
@@ -79,9 +107,12 @@ export default {
         { text: 'Growth Potential', value: 'growthPotential', align: 'centered' },
       ],
       orderedCurrencies: [],
+      selected: {},
       orderedBy: {},
       filterBy: '',
       loading: false,
+      modal: false,
+      trackErrorMessage: '',
     };
   },
   watch: {
@@ -100,7 +131,7 @@ export default {
       this.orderedCurrencies = _.orderBy(
         this.currencies,
         (obj) => {
-          const isText = textFields.includes(obj[this.orderedBy.field]);
+          const isText = textFields.includes(this.orderedBy.field);
           return isText ? obj[this.orderedBy.field] : parseInt(obj[this.orderedBy.field], 10);
         },
         this.orderedBy.order,
@@ -113,10 +144,36 @@ export default {
         return keys.some(key => (currency[key] || '').toString().toLowerCase().includes(this.filterBy.toLowerCase()));
       });
     },
+    track() {
+      if (this.selected) {
+        this.$store.dispatch('track', { symbol: this.selected.symbol })
+          .then(() => this.$store.dispatch('fetchTrackedCurrencyIds'))
+          .then(() => {
+            this.selected = {};
+            this.modal = false;
+            this.$store.dispatch('hightLightTrackedCoinsMenu');
+          })
+          .catch((error) => {
+            this.trackErrorMessage = error.message;
+          });
+      }
+    },
+    openModal(currency) {
+      this.selected = currency;
+      this.modal = true;
+    },
+    closeModal() {
+      this.selected = {};
+      this.modal = false;
+      this.trackErrorMessage = '';
+    },
   },
   computed: {
     currencies() {
       return this.$store.getters.currencies;
+    },
+    trackedCurrencyIds() {
+      return this.$store.getters.trackedCurrencyIds;
     },
   },
   mounted() {
@@ -124,6 +181,7 @@ export default {
     this.$store.dispatch('fetchCurrencies').then(() => {
       this.orderBy('rank');
       this.loading = false;
+      this.$store.dispatch('fetchTrackedCurrencyIds');
     });
   },
   components: {
@@ -133,12 +191,21 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
   .has-addons {
     margin-top: 40px;
     margin-bottom: 25px;
   }
   .search-bar {
     width: 300px;
+  }
+  .notification {
+    padding: 8px;
+    margin: 15px 0 0 0;
+  }
+  tr.tracked {
+    border-left-color: lighten(#3273dc, 20%);
+    border-left-width: 2px;
+    border-left-style: solid;
   }
 </style>

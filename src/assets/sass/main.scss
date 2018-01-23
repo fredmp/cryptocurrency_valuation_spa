@@ -74,13 +74,30 @@
 };
 
 
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 body {
   font-family: Roboto, sans-serif;
   font-size: 15px;
   font-weight: normal;
   line-height: 20px;
   text-rendering: optimizeLegibility;
-};
+
+  position: relative;
+  margin: 0;
+  padding-bottom: 8rem;
+  min-height: 100%;
+}
 
 .title {
   box-sizing: border-box;
@@ -164,4 +181,19 @@ th > td {
 }
 td {
   padding-top: 10px !important;
+}
+.footer {
+  background-color: #3273dc;
+  color: white;
+  padding-top: 70px;
+  padding-bottom: 20px;
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.footer strong, .footer a {
+  padding-top: 20px;
+  color: white;
 }
