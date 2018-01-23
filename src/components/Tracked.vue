@@ -35,12 +35,20 @@
         <section class="modal-card-body">
           <div class="tabs is-centered">
             <ul>
-              <li class="is-active"><a>Info</a></li>
-              <li><a>Valuations</a></li>
+              <li :class="{ 'is-active': currentComponent === 'tracked-info' }">
+                <a @click="currentComponent = 'tracked-info'">
+                  Info
+                </a>
+              </li>
+              <li :class="{ 'is-active': currentComponent === 'tracked-valuations' }">
+                <a @click="currentComponent = 'tracked-valuations'">
+                  Valuations
+                </a>
+              </li>
               <li><a>Notes</a></li>
             </ul>
           </div>
-          <tracked-info :selected="selected"></tracked-info>
+          <component :is="currentComponent" :selected="selected" class="main-content"></component>
         </section>
         <footer class="modal-card-foot">
           <button
@@ -86,6 +94,7 @@
 import _ from 'lodash';
 import Spinner from '@/components/utils/Spinner';
 import TrackedInfo from '@/components/TrackedInfo';
+import TrackedValuations from '@/components/TrackedValuations';
 
 export default {
   name: 'Tracked',
@@ -113,6 +122,7 @@ export default {
       orderedBy: {},
       filterBy: '',
       orderedTracked: [],
+      currentComponent: 'tracked-info',
     };
   },
   watch: {
@@ -185,6 +195,7 @@ export default {
   components: {
     Spinner,
     TrackedInfo,
+    TrackedValuations,
   },
 };
 </script>
@@ -206,5 +217,8 @@ export default {
 .modal-card-title > span {
   vertical-align: middle;
   margin-left: 10px;
+}
+.main-content {
+  min-height: 424px;
 }
 </style>

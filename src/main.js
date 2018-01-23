@@ -50,6 +50,20 @@ Vue.filter('money', function (value) {
   }
 });
 
+Vue.filter('moneyMagnitude', function (value) {
+  try {
+    const size = parseInt(value, 10).toFixed(0).length;
+    if (size > 12) return 'Trillions';
+    if (size > 9) return 'Billions';
+    if (size > 6) return 'Millions';
+    if (size > 3) return 'Thousands';
+    if (size > 2) return 'Hundreds';
+    return size;
+  } catch (e) {
+    return '';
+  }
+});
+
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */

@@ -46,6 +46,8 @@
               type="text"
               :value="selected.currency.marketCap | money"
               readonly>
+            <span
+              class="corner corner-tip">{{ selected.currency.marketCap | moneyMagnitude }}</span>
           </div>
         </div>
       </div>
@@ -62,6 +64,8 @@
               type="text"
               :value="selected.currency.volume24h | money"
               readonly>
+            <span
+              class="corner corner-tip">{{ selected.currency.volume24h | moneyMagnitude }}</span>
           </div>
         </div>
       </div>
@@ -265,6 +269,10 @@ export default {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+.corner-tip {
+  font-size: 0.75em;
+  color: darkgray;
 }
 .price-up {
   color: #00d1b2;
