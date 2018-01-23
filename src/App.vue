@@ -27,6 +27,14 @@
     <div class="container">
       <router-view></router-view>
     </div>
+
+    <footer class="footer">
+      <div class="content has-text-centered">
+        <p>
+          <strong>Crypto Currency Valuation Tool</strong> by <a href="http://about.me/fredericomartins">Frederico Martins</a> for <a href="https://www.linkedin.com/company/cosmos-tecnologia/">Cosmos Tecnologia</a> - 2018
+        </p>
+      </div>
+    </footer>
   </div>
 </template>
 
