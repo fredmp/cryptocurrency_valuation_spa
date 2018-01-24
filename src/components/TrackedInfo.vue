@@ -162,7 +162,7 @@
     </div>
     <div class="field is-horizontal">
       <div class="field-label is-normal">
-        <label class="label">Valuation</label>
+        <label class="label">Expected Price</label>
       </div>
       <div class="field-body">
         <div class="field">
@@ -170,23 +170,7 @@
             <input
               class="input pointer has-text-centered"
               type="text"
-              :value="0"
-              readonly>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="field is-horizontal">
-      <div class="field-label is-normal">
-        <label class="label">Fair Price</label>
-      </div>
-      <div class="field-body">
-        <div class="field">
-          <div class="control">
-            <input
-              class="input pointer has-text-centered"
-              type="text"
-              :value="selected.currency.fairPrice | money"
+              :value="selected.expectedPrice | money"
               readonly>
           </div>
         </div>
@@ -194,7 +178,7 @@
     </div>
     <div class="field is-horizontal">
       <div class="field-label is-normal growth-label">
-        <label class="label">Growth Potential</label>
+        <label class="label">Expected Growth</label>
       </div>
       <div class="field-body">
         <div class="field">
@@ -202,7 +186,7 @@
             <input
               class="input pointer has-text-centered"
               type="text"
-              :value="selected.currency.growthPotential + ' %'"
+              :value="selected.expectedGrowth + ' %'"
               readonly>
           </div>
         </div>

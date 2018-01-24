@@ -72,7 +72,6 @@
             <td class="table-text has-text-centered">{{ c.liquidity }}</td>
             <td class="table-text has-text-centered">{{ c.inflationary | humanizeBoolean }}</td>
             <td class="table-text has-text-right">{{ c.maxPrice | round }}</td>
-            <td class="table-text has-text-right">{{ c.fairPrice | round }}</td>
             <td class="table-text has-text-right">{{ c.growthPotential | round }} %</td>
           </tr>
         </tbody>
@@ -103,7 +102,6 @@ export default {
         { text: 'Liquidity', value: 'liquidity', align: 'centered' },
         { text: 'Inflationary', value: 'inflationary', align: 'centered' },
         { text: 'Max Price', value: 'maxPrice', align: 'centered' },
-        { text: 'Fair Price', value: 'fairPrice', align: 'centered' },
         { text: 'Growth Potential', value: 'growthPotential', align: 'centered' },
       ],
       orderedCurrencies: [],
