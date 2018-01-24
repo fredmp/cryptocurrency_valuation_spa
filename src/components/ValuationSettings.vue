@@ -122,6 +122,9 @@
                   type="text"
                   placeholder="Weight"
                   required>
+                <span :class="{ 'weight-remaining': true, 'weight-invalid': !validSelectedWeight }">
+                  {{ remainingWeight }} remaining
+                </span>
               </div>
             </div>
           </form>
@@ -137,6 +140,9 @@
         </footer>
       </div>
     </div>
+    <div class="has-text-right" v-show="remainingWeight > 0">
+      <span>Remaining weight to distribute: <strong>{{ remainingWeight }}</strong></span>
+    </div>
     <div class="chart">
       <doughnut-chart :label="'Valuation Settings'" :elements="chartElements"></doughnut-chart>
     </div>
@@ -150,8 +156,8 @@ import Spinner from '@/components/utils/Spinner';
 export default {
   data: () => ({
     modal: false,
-    valuation: { name: '', description: '', maxValue: '', weight: '' },
-    items: [1, 2, 3, 4, 5],
+    valuation: { name: '', description: '', maxValue: '', weight: 0 },
+    items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     loading: false,
     headers: [
       { text: 'Name', value: 'name', align: 'left' },
@@ -206,7 +212,8 @@ export default {
       return typeof this.valuation.maxValue === 'number' &&
         this.valuation.maxValue > 0 &&
         this.valuation.name.length > 0 &&
-        this.valuation.weight.length > 0;
+        this.valuation.weight.length > 0 &&
+        this.validSelectedWeight;
     },
     chartElements() {
       return this.valuations.map(
@@ -215,6 +222,15 @@ export default {
           color: `#${this.generateColor(index)}`,
           data: value.weight,
         }));
+    },
+    remainingWeight() {
+      // eslint-disable-next-line arrow-body-style
+      return 100 - this.valuations.reduce((accumulator, valuation) => {
+        return accumulator + parseFloat(valuation.weight);
+      }, 0);
+    },
+    validSelectedWeight() {
+      return this.valuation.weight <= this.remainingWeight;
     },
   },
   mounted() {
@@ -231,57 +247,65 @@ export default {
 </script>
 
 <style scoped>
-  i {
-    cursor: pointer;
-  }
-  th > td {
-    color: rgba(0, 0, 0, 0.54);
-  }
-  tr td:first-child {
-    padding-left: 10px;
-  }
-  input.is-short {
-    width: 180px;
-  }
-  td.is-short {
-    width: 50px;
-  }
-  td > a.is-danger {
-    color: #ff3860;
-  }
-  td > a.is-info {
-    color: #209cee;
-  }
-  svg.is-warning {
-    color: #ffdd57;
-    display: block;
-  }
-  .media-left {
-    margin: auto;
-    margin-right: 15px;
-  }
-  .media-content {
-    margin: auto;
-  }
-  .content > p {
-    margin: auto;
-  }
-  .content > p > pre {
-    padding: 0px;
-    margin: 0px;
-    display: inline;
-  }
-  .content > p > svg {
-    padding: 0px;
-    margin: 0px;
-    display: inline;
-    vertical-align: middle;
-  }
-  .main {
-    padding-bottom: 150px;
-  }
-  div.chart {
-    max-width: 40%;
-    margin: auto;
-  }
+i {
+  cursor: pointer;
+}
+th > td {
+  color: rgba(0, 0, 0, 0.54);
+}
+tr td:first-child {
+  padding-left: 10px;
+}
+input.is-short {
+  width: 180px;
+}
+td.is-short {
+  width: 50px;
+}
+td > a.is-danger {
+  color: #ff3860;
+}
+td > a.is-info {
+  color: #209cee;
+}
+svg.is-warning {
+  color: #ffdd57;
+  display: block;
+}
+.media-left {
+  margin: auto;
+  margin-right: 15px;
+}
+.media-content {
+  margin: auto;
+}
+.content > p {
+  margin: auto;
+}
+.content > p > pre {
+  padding: 0px;
+  margin: 0px;
+  display: inline;
+}
+.content > p > svg {
+  padding: 0px;
+  margin: 0px;
+  display: inline;
+  vertical-align: middle;
+}
+.main {
+  padding-bottom: 150px;
+}
+div.chart {
+  max-width: 40%;
+  margin: auto;
+}
+.weight-remaining {
+  line-height: 2.4;
+  margin-left: 5px;
+  font-size: 0.9em;
+}
+.weight-invalid {
+  color: #ff3860;
+}
 </style>
