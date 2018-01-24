@@ -79,6 +79,18 @@ export const track = async ({ commit }, payload) => {
   }
 };
 
+// eslint-disable-next-line no-unused-vars
+export const untrack = async ({ commit }, payload) => {
+  try {
+    await Axios.delete(`/tracked/${payload.symbol}`);
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};
+
 export const hightLightTrackedCoinsMenu = ({ commit }) => {
   commit('menuTrackedCoinsHighlight', true);
   setTimeout(function () {

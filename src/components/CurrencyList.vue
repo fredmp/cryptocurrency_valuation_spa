@@ -26,11 +26,16 @@
         <div class="modal-background"></div>
         <div class="modal-card">
           <header class="modal-card-head">
-            <p class="modal-card-title">Track {{ selected.symbol }}</p>
+            <p class="modal-card-title">
+              {{ trackedCurrencyIds.includes(selected.id) ? 'Untrack': 'Track' }}
+              {{ selected.symbol }}
+            </p>
             <button class="delete" aria-label="close" @click="closeModal"></button>
           </header>
           <section class="modal-card-body">
-            Do you want to monitor {{ selected.name }}?
+            Do you want to
+            {{ trackedCurrencyIds.includes(selected.id) ? 'untrack': 'track' }}
+            {{ selected.name }}?
             <div class="notification is-danger" v-show="trackErrorMessage.length > 0">
               <button class="delete" @click="trackErrorMessage = ''"></button>
               {{ trackErrorMessage }}
@@ -144,7 +149,8 @@ export default {
     },
     track() {
       if (this.selected) {
-        this.$store.dispatch('track', { symbol: this.selected.symbol })
+        const action = this.trackedCurrencyIds.includes(this.selected.id) ? 'untrack' : 'track';
+        this.$store.dispatch(action, { symbol: this.selected.symbol })
           .then(() => this.$store.dispatch('fetchTrackedCurrencyIds'))
           .then(() => {
             this.selected = {};
