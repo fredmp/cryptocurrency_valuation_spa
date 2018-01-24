@@ -36,3 +36,10 @@ export const menuTrackedCoinsHighlight = (state, payload) => {
   state.appConfig.menuTrackedCoinsHighlight = payload;
   state.appConfig = JSON.parse(JSON.stringify(state.appConfig));
 };
+
+export const updateValuation = (state, { trackedCurrency, valuationId, value }) => {
+  const valuation = trackedCurrency.valuations.find(v => v.id === valuationId);
+  if (valuation) {
+    valuation.value = value;
+  }
+};

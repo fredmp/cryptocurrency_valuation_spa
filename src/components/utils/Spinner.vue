@@ -1,5 +1,5 @@
 <template>
-  <div v-show="show">
+  <div v-show="show" class="spinner">
     <img src="../../assets/images/loader.gif" alt="Loader">
   </div>
 </template>

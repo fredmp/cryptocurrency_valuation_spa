@@ -85,3 +85,19 @@ export const hightLightTrackedCoinsMenu = ({ commit }) => {
     commit('menuTrackedCoinsHighlight', false);
   }, 2500);
 };
+
+export const updateValuation = async ({ commit }, payload) => {
+  try {
+    await Axios.put(`/valuations/${payload.valuation.id}`, { value: payload.value });
+    commit('updateValuation', {
+      trackedCurrency: payload.trackedCurrency,
+      valuationId: payload.valuation.id,
+      value: payload.value,
+    });
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};
