@@ -159,6 +159,7 @@ export default {
     valuation: { name: '', description: '', maxValue: '', weight: 0 },
     items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     loading: false,
+    originalWeight: 0,
     headers: [
       { text: 'Name', value: 'name', align: 'left' },
       { text: 'Description', value: 'description', align: 'left' },
@@ -171,7 +172,7 @@ export default {
   methods: {
     add() {
       this.modal = true;
-      this.valuation = { name: '', description: '', maxValue: '', weight: '' };
+      this.valuation = { name: '', description: '', maxValue: '', weight: 0 };
     },
     save() {
       if (!this.valid) return;
@@ -188,12 +189,14 @@ export default {
     edit(valuationId) {
       const found = this.valuations.find(v => v.id === valuationId);
       const { id, name, description, maxValue, weight } = found;
+      this.originalWeight = weight;
       this.valuation = { id, name, description, maxValue, weight };
       this.modal = true;
     },
     clear() {
       this.modal = false;
-      this.valuation = { name: '', description: '', maxValue: '', weight: '' };
+      this.originalWeight = 0;
+      this.valuation = { name: '', description: '', maxValue: '', weight: 0 };
     },
     generateColor(index) {
       const colors = [
@@ -230,7 +233,9 @@ export default {
       }, 0);
     },
     validSelectedWeight() {
-      return this.valuation.weight <= this.remainingWeight;
+      const diff = this.valuation.weight - this.originalWeight;
+      if (diff <= 0) return true;
+      return diff <= this.remainingWeight;
     },
   },
   mounted() {
