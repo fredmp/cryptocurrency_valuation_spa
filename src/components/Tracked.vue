@@ -148,7 +148,7 @@ export default {
           this.orderedBy.order = this.orderedBy.order === 'asc' ? 'desc' : 'asc';
         }
       } else {
-        this.orderedBy = { field, order: 'asc' };
+        this.orderedBy = { field, order: order || 'asc' };
       }
       this.orderedTracked = _.orderBy(
         this.tracked,
@@ -192,7 +192,7 @@ export default {
   mounted() {
     this.loading = true;
     this.$store.dispatch('fetchTracked').then(() => {
-      this.orderBy('rank');
+      this.orderBy('expectedGrowth', 'desc');
       this.loading = false;
     });
   },
