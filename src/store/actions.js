@@ -68,6 +68,19 @@ export const fetchTracked = async ({ commit }) => {
 };
 
 // eslint-disable-next-line no-unused-vars
+export const updateTracked = async ({ commit }, payload) => {
+  try {
+    const { notes } = payload;
+    await Axios.patch(`/tracked/${payload.symbol}`, { notes });
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};
+
+// eslint-disable-next-line no-unused-vars
 export const track = async ({ commit }, payload) => {
   try {
     await Axios.post('/tracked', payload);

@@ -45,7 +45,11 @@
                   Valuations
                 </a>
               </li>
-              <li><a>Notes</a></li>
+              <li :class="{ 'is-active': currentComponent === 'tracked-notes' }">
+                <a @click="currentComponent = 'tracked-notes'">
+                  Notes
+                </a>
+              </li>
             </ul>
           </div>
           <component
@@ -93,6 +97,7 @@
 import _ from 'lodash';
 import Spinner from '@/components/utils/Spinner';
 import TrackedInfo from '@/components/TrackedInfo';
+import TrackedNotes from '@/components/TrackedNotes';
 import TrackedValuations from '@/components/TrackedValuations';
 
 export default {
@@ -130,6 +135,7 @@ export default {
   },
   methods: {
     openModal(trackedCurrency) {
+      this.currentComponent = 'tracked-info';
       this.selected = trackedCurrency;
       this.icon = this.currencyIcon();
       this.modal = true;
@@ -199,6 +205,7 @@ export default {
   components: {
     Spinner,
     TrackedInfo,
+    TrackedNotes,
     TrackedValuations,
   },
 };
