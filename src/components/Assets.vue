@@ -1,8 +1,20 @@
 <template>
   <div class="block">
-    <div class="block">
+    <spinner :show="loading"></spinner>
+    <div class="block" v-show="!loading">
       <nav class="level">
-        <div class="level-left"></div>
+        <div class="level-left">
+          <div class="add-asset">
+            <label>Add</label>
+            <!-- @input="add" -->
+            <v-select
+              class="select-currency"
+              v-model="selectedCurrency"
+              :options="currencies"
+              :disabled="adding">
+            </v-select>
+          </div>
+        </div>
         <div class="level-right">
           <div class="field has-addons">
             <p class="control">
@@ -21,17 +33,14 @@
         </div>
       </nav>
     </div>
-    <div class="block">
+    <div class="block" v-show="!loading">
       <nav class="level">
-        <div class="level-left">
-        </div>
+        <div class="level-left"></div>
         <div class="level-right">
-          <a class="button is-info" @click="add()">Add</a>
         </div>
       </nav>
     </div>
-    <spinner :show="loading"></spinner>
-    <div class="block">
+    <div class="block" v-show="!loading">
       <table class="table is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
           <th v-for="h in headers" :key="h.value">
@@ -64,7 +73,7 @@
             </td>
           </tr>
         </tbody>
-        <tfoot>
+        <tfoot v-show="assets.length > 0">
           <tr>
             <td></td>
             <td></td>
@@ -87,6 +96,7 @@
           </tr>
         </tfoot>
       </table>
+      {{ selectedCurrency }}
       <div class="chart">
         <doughnut-chart :label="'Assets'" :elements="chartElements"></doughnut-chart>
       </div>
@@ -95,6 +105,7 @@
 </template>
 
 <script>
+import vSelect from 'vue-select';
 import DoughnutChart from '@/components/utils/DoughnutChart';
 import Spinner from '@/components/utils/Spinner';
 
@@ -103,13 +114,11 @@ export default {
   data() {
     return {
       loading: false,
+      adding: false,
+      modal: false,
       filterBy: '',
-      assets: [
-        { currency: { name: 'Bitcoin', symbol: 'BTC' }, id: 1, amount: 0.02, btcValue: 0.02, usdValue: 200 },
-        { currency: { name: 'Litecoin', symbol: 'LTC' }, id: 2, amount: 1, btcValue: 0.01, usdValue: 1000 },
-        { currency: { name: 'Ethereum', symbol: 'ETH' }, id: 3, amount: 1, btcValue: 0.1, usdValue: 1000 },
-        { currency: { name: 'Electroneum', symbol: 'ETN' }, id: 4, amount: 2, btcValue: 0.01, usdValue: 200 },
-      ],
+      selectedCurrency: null,
+      orderedAssets: [],
       headers: [
         { text: '#', value: 'image', align: 'centered' },
         { text: 'Symbol', value: 'symbol', align: 'centered' },
@@ -130,7 +139,22 @@ export default {
       // Filter
     },
     add() {
-      // Add
+      // if (selected && selected.value) {
+      //   // this.adding = true;
+      //   // this.$store.dispatch('addAsset', { symbol: selected.value })
+      //   //   .then(() => this.$store.dispatch('fetchAssets'))
+      //   //   .then(() => {
+      //   //     // this.orderBy();
+      //   //     this.adding = false;
+      //   //   })
+      //   //   .catch((error) => {
+      //   //     // Feedback notification
+      //   //     console.log(error);
+      //   //     this.adding = false;
+      //   //   });
+      // }
+      console.log(this.selectedCurrency);
+      this.selectedCurrency = { value: null };
     },
     edit(id) {
       console.log(id);
@@ -164,8 +188,35 @@ export default {
           data: value.usdValue,
         }));
     },
+    currencies() {
+      /* eslint-disable arrow-body-style */
+      return this.$store.getters.currencies
+        .filter(c => !this.assets.find(a => a.currency.symbol === c.symbol))
+        .map((c) => {
+          return { label: `${c.symbol} - ${c.name}`, value: c.symbol };
+        });
+      /* eslint-enable arrow-body-style */
+    },
+    assets() {
+      return this.$store.getters.assets;
+    },
+  },
+  mounted() {
+    this.loading = true;
+    this.$store.dispatch('fetchCurrencies')
+      .then(() => this.$store.dispatch('fetchAssets'))
+      .then(() => {
+        this.orderedAssets = this.assets;
+        // this.orderBy('rank');
+        this.loading = false;
+      })
+      .catch((error) => {
+        console.log(error);
+        this.loading = false;
+      });
   },
   components: {
+    vSelect,
     DoughnutChart,
     Spinner,
   },
@@ -208,5 +259,15 @@ tr td:first-child {
 }
 .padding-right {
   padding-right: 12px !important;
+}
+.add-asset {
+  margin-top: 40px;
+  margin-left: 4px;
+}
+.add-asset > label {
+  margin-top: 8px;
+  margin-right: 6px;
+  display: inline-block;
+  color: #3273dc;
 }
 </style>

@@ -1,5 +1,7 @@
 export const currencies = state => state.currencies || [];
 
+export const assets = state => state.assets || [];
+
 export const tracked = state => state.tracked || [];
 
 export const trackedCurrencyIds = state => state.trackedCurrencyIds || [];

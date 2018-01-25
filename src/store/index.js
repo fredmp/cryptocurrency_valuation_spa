@@ -8,6 +8,7 @@ Vue.use(Vuex);
 
 const state = {
   currencies: [],
+  assets: [],
   tracked: [],
   trackedCurrencyIds: [],
   valuationSettings: [],

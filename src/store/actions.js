@@ -126,3 +126,27 @@ export const updateValuation = async ({ commit }, payload) => {
     throw e;
   }
 };
+
+export const fetchAssets = async ({ commit }) => {
+  try {
+    const response = await Axios.get('/assets');
+    commit('assets', response.data);
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};
+
+// eslint-disable-next-line no-unused-vars
+export const addAsset = async ({ commit }, payload) => {
+  try {
+    await Axios.post('/assets', payload);
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};
