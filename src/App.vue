@@ -20,6 +20,7 @@
           @click="$router.push('tracked')">
           Tracked Coins
         </a>
+        <a href="#" class="navbar-item" @click="$router.push('assets')">My Assets</a>
         <a href="#" class="navbar-item" @click="$router.push('settings')">Settings</a>
       </div>
     </nav>
