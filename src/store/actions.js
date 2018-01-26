@@ -150,3 +150,28 @@ export const addAsset = async ({ commit }, payload) => {
     throw e;
   }
 };
+
+// eslint-disable-next-line no-unused-vars
+export const removeAsset = async ({ commit }, payload) => {
+  try {
+    await Axios.delete(`/assets/${payload.symbol}`);
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};
+
+// eslint-disable-next-line no-unused-vars
+export const updateAsset = async ({ commit }, payload) => {
+  try {
+    const { amount } = payload;
+    await Axios.patch(`/assets/${payload.symbol}`, { amount });
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};

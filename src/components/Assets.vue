@@ -44,7 +44,9 @@
       <table class="table is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
           <th v-for="h in headers" :key="h.value">
-            <td :id="h.value" :class="'table-header table-text has-text-' + h.align">
+            <td
+              :id="h.value"
+              :class="'table-header table-text has-text-' + h.align">
               <a @click="orderBy(h.value)">{{ h.text }}</a>
             </td>
           </th>
@@ -59,16 +61,30 @@
             </td>
             <td class="table-text has-text-centered">{{ a.currency.symbol }}</td>
             <td class="table-text has-text-left padding-left">{{ a.currency.name }}</td>
-            <td class="table-text has-text-right padding-right">{{ a.amount | round }}</td>
+            <td class="table-text has-text-right padding-right amount-td">
+              <div class="amount-div">
+                <span v-show="editing !== a.id">{{ a.amount | round }}</span>
+                <input
+                  v-show="editing === a.id"
+                  v-amount-focus="editing === a.id"
+                  @focus="$event.target.select()"
+                  class="has-text-right amount-input"
+                  type="text"
+                  @blur="doneEdit(a, $event)"
+                  @keyup.enter="doneEdit(a, $event)"
+                  @keyup.esc="cancelEdit"
+                  :value="a.amount">
+              </div>
+            </td>
             <td class="table-text has-text-right padding-right">{{ a.btcValue | round }}</td>
             <td class="table-text has-text-right padding-right">{{ a.usdValue | round }}</td>
             <td class="table-text has-text-centered is-short">
-              <a @click.capture="edit(a.id)" class="is-info">
+              <a @click.capture="editing = a.id" class="is-info">
                 <icon name="edit" label="Edit"></icon>
               </a>
             </td>
             <td class="table-text has-text-centered is-short">
-              <a @click.capture="remove(a.id)" class="is-danger">
+              <a @click.capture="remove(a.currency.symbol)" class="is-danger">
                 <icon name="times" label="Remove"></icon>
               </a>
             </td>
@@ -79,7 +95,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td class="amount-td"></td>
             <td class="has-text-right footer-total">0.14</td>
             <td class="has-text-right footer-total">$ 2,400.00</td>
             <td></td>
@@ -89,7 +105,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td class="amount-td"></td>
             <td></td>
             <td class="has-text-right footer-total">R$ 7.200,00</td>
             <td></td>
@@ -114,6 +130,7 @@ export default {
   data() {
     return {
       loading: false,
+      editing: null,
       adding: false,
       modal: false,
       filterBy: '',
@@ -129,6 +146,13 @@ export default {
         { text: 'Remove', value: 'remove', align: 'centered' },
       ],
     };
+  },
+  directives: {
+    'amount-focus': function (el, binding) {
+      if (binding.value) {
+        el.focus();
+      }
+    },
   },
   methods: {
     orderBy(field) {
@@ -159,11 +183,32 @@ export default {
           });
       }
     },
-    edit(id) {
-      console.log(id);
+    doneEdit(asset, event) {
+      if (event.target && event.target.value && event.target.value !== asset.amount) {
+        this.$store.dispatch(
+          'updateAsset',
+          { symbol: asset.currency.symbol, amount: event.target.value })
+          .then(() => this.$store.dispatch('fetchAssets'))
+          .then(() => {
+            // this.orderBy();
+            this.editing = null;
+          }).catch((error) => {
+            // Feedback notification
+            console.log(error);
+            this.editing = null;
+          });
+      }
     },
-    remove(id) {
-      console.log(id);
+    cancelEdit() {
+      this.editing = null;
+    },
+    remove(symbol) {
+      this.$store.dispatch('removeAsset', { symbol })
+        .then(() => this.$store.dispatch('fetchAssets'))
+        .catch((error) => {
+          // Feedback notification
+          console.log(error);
+        });
     },
     currencyIcon(name) {
       try {
@@ -273,6 +318,14 @@ tr td:first-child {
   display: inline-block;
   color: #3273dc;
 }
+td#amount, td.amount-td, .amount-div {
+  width: 200px !important;
+}
+.amount-input {
+  height: 22px;
+  font-size: 1em;
+}
+
 .fade {
   animation: fade 1.8s infinite linear both;
 }
