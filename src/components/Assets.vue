@@ -6,10 +6,10 @@
         <div class="level-left">
           <div class="add-asset">
             <label>Add</label>
-            <!-- @input="add" -->
             <v-select
+              ref="select"
               class="select-currency"
-              v-model="selectedCurrency"
+              @input="add"
               :options="currencies"
               :disabled="adding">
             </v-select>
@@ -51,8 +51,9 @@
         </thead>
         <tbody>
           <tr
-            v-for="a in assets"
-            :key="a.id">
+            v-for="(a, index) in assets"
+            :key="a.id"
+            :class="{ 'fade': adding && index + 1 === assets.length }">
             <td class="table-text has-text-centered">
               <img :src="currencyIcon(a.currency.name)" :alt="a.currency.name">
             </td>
@@ -96,7 +97,6 @@
           </tr>
         </tfoot>
       </table>
-      {{ selectedCurrency }}
       <div class="chart">
         <doughnut-chart :label="'Assets'" :elements="chartElements"></doughnut-chart>
       </div>
@@ -117,7 +117,6 @@ export default {
       adding: false,
       modal: false,
       filterBy: '',
-      selectedCurrency: null,
       orderedAssets: [],
       headers: [
         { text: '#', value: 'image', align: 'centered' },
@@ -138,23 +137,27 @@ export default {
     filter() {
       // Filter
     },
-    add() {
-      // if (selected && selected.value) {
-      //   // this.adding = true;
-      //   // this.$store.dispatch('addAsset', { symbol: selected.value })
-      //   //   .then(() => this.$store.dispatch('fetchAssets'))
-      //   //   .then(() => {
-      //   //     // this.orderBy();
-      //   //     this.adding = false;
-      //   //   })
-      //   //   .catch((error) => {
-      //   //     // Feedback notification
-      //   //     console.log(error);
-      //   //     this.adding = false;
-      //   //   });
-      // }
-      console.log(this.selectedCurrency);
-      this.selectedCurrency = { value: null };
+    add(newAsset) {
+      if (newAsset && newAsset.value) {
+        this.adding = true;
+        this.$store.dispatch('addAsset', { symbol: newAsset.value })
+          .then(() => {
+            this.$refs.select.clearSelection();
+            return this.$store.dispatch('fetchAssets');
+          })
+          .then(() => {
+            // this.orderBy();
+            setTimeout(() => {
+              this.adding = false;
+            }, 3500);
+          })
+          .catch((error) => {
+            // Feedback notification
+            console.log(error);
+            this.adding = false;
+            this.$refs.select.clearSelection();
+          });
+      }
     },
     edit(id) {
       console.log(id);
@@ -269,5 +272,18 @@ tr td:first-child {
   margin-right: 6px;
   display: inline-block;
   color: #3273dc;
+}
+.fade {
+  animation: fade 1.8s infinite linear both;
+}
+
+@keyframes fade {
+  from, to {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 </style>
