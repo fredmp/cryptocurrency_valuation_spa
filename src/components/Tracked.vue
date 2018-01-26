@@ -95,7 +95,7 @@
 
 <script>
 import _ from 'lodash';
-import Spinner from '@/components/utils/Spinner';
+import Spinner from '@/components/common/Spinner';
 import TrackedInfo from '@/components/TrackedInfo';
 import TrackedNotes from '@/components/TrackedNotes';
 import TrackedValuations from '@/components/TrackedValuations';

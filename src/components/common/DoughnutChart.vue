@@ -23,7 +23,7 @@ export default {
             data: this.elements.map(e => e.data),
           },
         ],
-      });
+      }, { responsive: false, maintainAspectRatio: true });
     },
   },
 

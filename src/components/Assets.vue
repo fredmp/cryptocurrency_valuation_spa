@@ -53,7 +53,7 @@
         </thead>
         <tbody>
           <tr
-            v-for="(a, index) in assets"
+            v-for="(a, index) in orderedAssets"
             :key="a.id"
             :class="{ 'fade': adding && index + 1 === assets.length }">
             <td class="table-text has-text-centered">
@@ -76,7 +76,7 @@
                   :value="a.amount">
               </div>
             </td>
-            <td class="table-text has-text-right padding-right">{{ a.btcValue | round }}</td>
+            <td class="table-text has-text-right padding-right">{{ a.btcValue | round(8) }}</td>
             <td class="table-text has-text-right padding-right">{{ a.usdValue | round }}</td>
             <td class="table-text has-text-centered is-short">
               <a @click.capture="editing = a.id" class="is-info">
@@ -96,8 +96,8 @@
             <td></td>
             <td></td>
             <td class="amount-td"></td>
-            <td class="has-text-right footer-total">0.14</td>
-            <td class="has-text-right footer-total">$ 2,400.00</td>
+            <td class="has-text-right footer-total">{{ totalBtc | round(8) }}</td>
+            <td class="has-text-right footer-total">$ {{ totalUsd | round }}</td>
             <td></td>
             <td></td>
           </tr>
@@ -107,7 +107,8 @@
             <td></td>
             <td class="amount-td"></td>
             <td></td>
-            <td class="has-text-right footer-total">R$ 7.200,00</td>
+            <!-- Get user currency symbol from configuration -->
+            <td class="has-text-right footer-total">R$ {{ totalUserCurrency | round }}</td>
             <td></td>
             <td></td>
           </tr>
@@ -122,8 +123,10 @@
 
 <script>
 import vSelect from 'vue-select';
-import DoughnutChart from '@/components/utils/DoughnutChart';
-import Spinner from '@/components/utils/Spinner';
+import _ from 'lodash';
+import DoughnutChart from '@/components/common/DoughnutChart';
+import Spinner from '@/components/common/Spinner';
+import { generateColor } from '@/utils/mixins';
 
 export default {
   name: 'Assets',
@@ -134,7 +137,10 @@ export default {
       adding: false,
       modal: false,
       filterBy: '',
+      orderedBy: {},
       orderedAssets: [],
+      totalUserCurrency: null,
+      userCurrencyRate: 1,
       headers: [
         { text: '#', value: 'image', align: 'centered' },
         { text: 'Symbol', value: 'symbol', align: 'centered' },
@@ -154,12 +160,51 @@ export default {
       }
     },
   },
+  watch: {
+    // eslint-disable-next-line object-shorthand
+    totalUsd: function (newValue) {
+      this.calculateTotalUserCurrency(newValue);
+    },
+    filterBy() {
+      this.filter();
+    },
+  },
   methods: {
-    orderBy(field) {
-      console.log(field);
+    orderBy(field, order) {
+      const currencyKeys = ['symbol', 'name'];
+      if (field === this.orderedBy.field) {
+        this.orderedBy.order = this.orderedBy.order === 'asc' ? 'desc' : 'asc';
+        if (order) {
+          this.orderedBy.order = order;
+        }
+      } else {
+        this.orderedBy = { field, order: order || 'asc' };
+      }
+      this.orderedAssets = _.orderBy(
+        this.assets,
+        (obj) => {
+          let target = obj;
+          let isText = false;
+          if (currencyKeys.includes(this.orderedBy.field)) {
+            target = obj.currency;
+            isText = true;
+          }
+          return isText ?
+            target[this.orderedBy.field] : parseInt(target[this.orderedBy.field], 10);
+        },
+        this.orderedBy.order,
+      );
     },
     filter() {
-      // Filter
+      this.orderedAssets = this.assets.filter((a) => {
+        if (this.filterBy === '') return true;
+        const query = this.filterBy.toLowerCase();
+        const assetKeys = ['amount', 'btcValue', 'usdValue'];
+        const currencyKeys = ['symbol', 'name'];
+
+        return currencyKeys.some(key => (a.currency[key] || '').toString().toLowerCase().includes(query)) ||
+               assetKeys.some(key => (a[key] || 0).toString().includes(query));
+      });
     },
     add(newAsset) {
       if (newAsset && newAsset.value) {
@@ -170,7 +215,7 @@ export default {
             return this.$store.dispatch('fetchAssets');
           })
           .then(() => {
-            // this.orderBy();
+            this.orderBy(this.orderedBy.field, this.orderedBy.order);
             setTimeout(() => {
               this.adding = false;
             }, 3500);
@@ -190,7 +235,7 @@ export default {
           { symbol: asset.currency.symbol, amount: event.target.value })
           .then(() => this.$store.dispatch('fetchAssets'))
           .then(() => {
-            // this.orderBy();
+            this.orderBy(this.orderedBy.field, this.orderedBy.order);
             this.editing = null;
           }).catch((error) => {
             // Feedback notification
@@ -205,7 +250,9 @@ export default {
     remove(symbol) {
       this.$store.dispatch('removeAsset', { symbol })
         .then(() => this.$store.dispatch('fetchAssets'))
-        .catch((error) => {
+        .then(() => {
+          this.orderBy(this.orderedBy.field, this.orderedBy.order);
+        }).catch((error) => {
           // Feedback notification
           console.log(error);
         });
@@ -218,21 +265,19 @@ export default {
         return '';
       }
     },
-    generateColor(index) {
-      const colors = [
-        '27BDDB', 'FF455A', '32CD90', '5330A2', 'FFDD52', '077187', 'F4F1BB', '74A57F',
-        '9ECE9A', 'E4C5AF', 'ED6A5A', '9BC1BC', '5CA4A9', '074F57', 'E6EBE0', 'DCEDFF',
-        '94B0DA', '8F91A2', 'A63446', '58B09C', 'F3B3A6', '1282A2', '62929E', 'DB5461',
-      ];
-      return `${index < 24 ? colors[index] : this.generateColor(index - 24)}`;
+    calculateTotalUserCurrency(usdValue) {
+      this.totalUserCurrency = null;
+      if (true) { // User has a local currency in configuration
+        this.totalUserCurrency = this.userCurrencyRate * usdValue;
+      }
     },
   },
   computed: {
     chartElements() {
-      return this.assets.map(
+      return this.orderedAssets.filter(a => a.amount > 0).map(
         (value, index) => ({
           label: value.currency.name,
-          color: `#${this.generateColor(index)}`,
+          color: `#${generateColor(index)}`,
           data: value.usdValue,
         }));
     },
@@ -248,15 +293,24 @@ export default {
     assets() {
       return this.$store.getters.assets;
     },
+    totalBtc() {
+      return this.orderedAssets.reduce((acc, asset) => acc + asset.btcValue, 0);
+    },
+    totalUsd() {
+      return this.orderedAssets.reduce((acc, asset) => acc + asset.usdValue, 0);
+    },
   },
   mounted() {
     this.loading = true;
     this.$store.dispatch('fetchCurrencies')
       .then(() => this.$store.dispatch('fetchAssets'))
       .then(() => {
-        this.orderedAssets = this.assets;
-        // this.orderBy('rank');
+        this.orderBy('usdValue', 'desc');
         this.loading = false;
+        this.$store.dispatch('exchangeRate', { symbol: 'BRL' }).then((rate) => {
+          this.userCurrencyRate = rate;
+          this.calculateTotalUserCurrency(this.totalUsd);
+        });
       })
       .catch((error) => {
         console.log(error);
@@ -325,16 +379,13 @@ td#amount, td.amount-td, .amount-div {
   height: 22px;
   font-size: 1em;
 }
-
 .fade {
   animation: fade 1.8s infinite linear both;
 }
-
 @keyframes fade {
   from, to {
     opacity: 0;
   }
-
   50% {
     opacity: 1;
   }

@@ -28,11 +28,11 @@ Axios.defaults.headers.get.Accepts = 'application/json';
 
 Vue.component('icon', Icon);
 
-Vue.filter('round', function (value) {
+Vue.filter('round', function (value, precision = 2) {
   if (!value) {
     value = 0;
   }
-  return parseFloat(value).toFixed(2);
+  return parseFloat(value).toFixed(precision);
 });
 
 Vue.filter('humanizeBoolean', function (value) {

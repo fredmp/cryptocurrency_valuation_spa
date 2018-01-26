@@ -175,3 +175,13 @@ export const updateAsset = async ({ commit }, payload) => {
     throw e;
   }
 };
+
+// eslint-disable-next-line no-unused-vars
+export const exchangeRate = async ({ commit }, payload) => {
+  try {
+    const response = await Axios.get(`https://api.fixer.io/latest?base=USD&symbols=${payload.symbol}`);
+    return response.data.rates[payload.symbol];
+  } catch (e) {
+    throw new Error(`Unable to get exchanged rate for ${payload.symbol}`);
+  }
+};
