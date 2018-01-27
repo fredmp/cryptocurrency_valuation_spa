@@ -310,7 +310,7 @@ export default {
     this.$store.dispatch('fetchCurrencies')
       .then(() => this.$store.dispatch('fetchAssets'))
       .then(() => {
-        this.orderBy('usdValue', 'desc');
+        this.orderBy();
         this.loading = false;
         this.$store.dispatch('exchangeRate', { symbol: 'BRL' }).then((rate) => {
           this.userCurrencyRate = rate;
