@@ -40,6 +40,10 @@
         </div>
       </nav>
     </div>
+    <div class="notification is-danger error-message-div" v-show="errorMessage">
+      <button class="delete" @click="errorMessage = null"></button>
+      <span>{{ errorMessage }}</span>
+    </div>
     <div class="block" v-show="!loading">
       <table class="table is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
@@ -63,7 +67,11 @@
             <td class="table-text has-text-left padding-left">{{ a.currency.name }}</td>
             <td class="table-text has-text-right padding-right amount-td">
               <div class="amount-div">
-                <span v-show="editing !== a.id">{{ a.amount | round }}</span>
+                <span
+                  v-show="editing !== a.id"
+                  @click="editing = a.id">
+                  {{ a.amount | round }}
+                </span>
                 <input
                   v-show="editing === a.id"
                   v-amount-focus="editing === a.id"
@@ -141,6 +149,7 @@ export default {
       orderedAssets: [],
       totalUserCurrency: null,
       userCurrencyRate: 1,
+      errorMessage: null,
       headers: [
         { text: '#', value: 'image', align: 'centered' },
         { text: 'Symbol', value: 'symbol', align: 'centered' },
@@ -168,39 +177,32 @@ export default {
     filterBy() {
       this.filter();
     },
+    inAction(value) {
+      const [loading, adding, editing] = value.split('|');
+      if (loading !== 'false' || adding !== 'false' || editing !== 'null') {
+        this.errorMessage = null;
+      }
+    },
   },
   methods: {
     orderBy(field, order) {
+      this.orderedBy.field = field || this.orderedBy.field || 'usdValue';
+      this.orderedBy.order = order || this.orderedBy.order === 'desc' ? 'asc' : 'desc';
+
       const currencyKeys = ['symbol', 'name'];
-      if (field === this.orderedBy.field) {
-        this.orderedBy.order = this.orderedBy.order === 'asc' ? 'desc' : 'asc';
-        if (order) {
-          this.orderedBy.order = order;
-        }
-      } else {
-        this.orderedBy = { field, order: order || 'asc' };
-      }
-      this.orderedAssets = _.orderBy(
-        this.assets,
-        (obj) => {
-          let target = obj;
-          let isText = false;
-          if (currencyKeys.includes(this.orderedBy.field)) {
-            target = obj.currency;
-            isText = true;
-          }
-          return isText ?
-            target[this.orderedBy.field] : parseInt(target[this.orderedBy.field], 10);
-        },
-        this.orderedBy.order,
-      );
+      this.orderedAssets = _.orderBy(this.assets, (obj) => {
+        const isCurrency = currencyKeys.includes(this.orderedBy.field);
+        const target = isCurrency ? obj.currency : obj;
+        return isCurrency ?
+          target[this.orderedBy.field] : parseFloat(target[this.orderedBy.field], 10);
+      }, this.orderedBy.order);
     },
     filter() {
       this.orderedAssets = this.assets.filter((a) => {
         if (this.filterBy === '') return true;
-        const query = this.filterBy.toLowerCase();
         const assetKeys = ['amount', 'btcValue', 'usdValue'];
         const currencyKeys = ['symbol', 'name'];
+        const query = this.filterBy.toLowerCase();
 
         return currencyKeys.some(key => (a.currency[key] || '').toString().toLowerCase().includes(query)) ||
                assetKeys.some(key => (a[key] || 0).toString().includes(query));
@@ -215,16 +217,15 @@ export default {
             return this.$store.dispatch('fetchAssets');
           })
           .then(() => {
-            this.orderBy(this.orderedBy.field, this.orderedBy.order);
+            this.orderBy();
             setTimeout(() => {
               this.adding = false;
             }, 3500);
           })
           .catch((error) => {
-            // Feedback notification
-            console.log(error);
             this.adding = false;
             this.$refs.select.clearSelection();
+            this.showErrorMessage(error);
           });
       }
     },
@@ -235,12 +236,11 @@ export default {
           { symbol: asset.currency.symbol, amount: event.target.value })
           .then(() => this.$store.dispatch('fetchAssets'))
           .then(() => {
-            this.orderBy(this.orderedBy.field, this.orderedBy.order);
+            this.orderBy();
             this.editing = null;
           }).catch((error) => {
-            // Feedback notification
-            console.log(error);
             this.editing = null;
+            this.showErrorMessage(error);
           });
       }
     },
@@ -251,11 +251,13 @@ export default {
       this.$store.dispatch('removeAsset', { symbol })
         .then(() => this.$store.dispatch('fetchAssets'))
         .then(() => {
-          this.orderBy(this.orderedBy.field, this.orderedBy.order);
+          this.orderBy();
         }).catch((error) => {
-          // Feedback notification
-          console.log(error);
+          this.showErrorMessage(error);
         });
+    },
+    showErrorMessage(error) {
+      this.errorMessage = (error.message || 'An error has occurred').toString().substr(0, 200);
     },
     currencyIcon(name) {
       try {
@@ -299,6 +301,9 @@ export default {
     totalUsd() {
       return this.orderedAssets.reduce((acc, asset) => acc + asset.usdValue, 0);
     },
+    inAction() {
+      return `${this.loading}|${this.adding}|${this.editing}`;
+    },
   },
   mounted() {
     this.loading = true;
@@ -313,8 +318,8 @@ export default {
         });
       })
       .catch((error) => {
-        console.log(error);
         this.loading = false;
+        this.showErrorMessage(error);
       });
   },
   components: {
