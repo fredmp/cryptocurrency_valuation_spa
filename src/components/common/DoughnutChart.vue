@@ -23,7 +23,7 @@ export default {
             data: this.elements.map(e => e.data),
           },
         ],
-      }, { responsive: false, maintainAspectRatio: true });
+      }, { responsive: true, maintainAspectRatio: true, events: ['click'] });
     },
   },
 
@@ -32,3 +32,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+canvas {
+  margin: auto !important;
+  padding-top: 20px;
+}
+</style>
