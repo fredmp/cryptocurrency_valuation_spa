@@ -57,3 +57,13 @@ export const setToken = (state, token) => {
   state.token = token;
   localStorage.setItem('token', token);
 };
+
+export const unsetUser = (state) => {
+  state.user = null;
+  localStorage.removeItem('user');
+};
+
+export const unsetToken = (state) => {
+  state.token = null;
+  localStorage.removeItem('token');
+};

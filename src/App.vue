@@ -13,32 +13,38 @@
       </div>
 
       <div class="navbar-end">
-        <a href="#" class="navbar-item" @click="$router.push('all')" v-show="isAuthenticated">
+        <a class="navbar-item" @click="$router.push('all')" v-show="isAuthenticated">
           All Coins
         </a>
         <a
-          href="#"
           :class="{ 'navbar-item': true, 'shake2': appConfig.menuTrackedCoinsHighlight }"
           @click="$router.push('tracked')"
            v-show="isAuthenticated">
           Tracked Coins
         </a>
-        <a href="#" class="navbar-item" @click="$router.push('assets')" v-show="isAuthenticated">
+        <a class="navbar-item" @click="$router.push('assets')" v-show="isAuthenticated">
           My Assets
         </a>
-        <a href="#" class="navbar-item" @click="$router.push('settings')" v-show="isAuthenticated">
+        <a class="navbar-item" @click="$router.push('settings')" v-show="isAuthenticated">
           Settings
         </a>
-        <a href="#" class="navbar-item" @click="$router.push('login')" v-show="!isAuthenticated">
+        <a class="navbar-item" @click="logout" v-show="isAuthenticated">
+          Logout
+        </a>
+        <a class="navbar-item" @click="$router.push('login')" v-show="!isAuthenticated">
           Login
         </a>
-        <a href="#" class="navbar-item" @click="$router.push('register')" v-show="!isAuthenticated">
+        <a class="navbar-item" @click="$router.push('register')" v-show="!isAuthenticated">
           Register
         </a>
       </div>
     </nav>
 
     <div class="container">
+      <div class="notification is-danger" v-show="errorMessage">
+        <button class="delete" @click="errorMessage = null"></button>
+        <span>{{ errorMessage }}</span>
+      </div>
       <router-view></router-view>
     </div>
 
@@ -57,14 +63,24 @@ export default {
   data() {
     return {
       title: 'Crypto Currency Valuation Tool',
+      errorMessage: null,
     };
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout')
+        .then(() => this.$router.push('login'))
+        .catch((error) => {
+          this.errorMessage = error.message;
+        });
+    },
   },
   computed: {
     appConfig() {
       return this.$store.getters.appConfig;
     },
     isAuthenticated() {
-      return this.$store.getters.isAuthenticated;
+      return this.$store.getters.token && this.$store.getters.user;
     },
   },
 };
@@ -87,5 +103,8 @@ export default {
   50% {
     transform: translate3d(10px, 0, 0);
   }
+}
+.notification {
+  margin-top: 20px;
 }
 </style>

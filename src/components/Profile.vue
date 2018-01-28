@@ -60,16 +60,29 @@
             <input
               class="input"
               type="password"
-              v-model="password"
+              v-model="currentPassword"
               autocomplete="password"
-              placeholder="Change your password">
+              placeholder="Current password">
+            <span class="icon is-small is-left">
+              <icon name="lock" label="Lock"></icon>
+            </span>
+          </p>
+        </div>
+        <div class="field">
+          <p class="control has-icons-left">
+            <input
+              class="input"
+              type="password"
+              v-model="newPassword"
+              autocomplete="newPassword"
+              placeholder="New password">
             <span class="icon is-small is-left">
               <icon name="lock" label="Lock"></icon>
             </span>
           </p>
           <p
             class="help is-danger"
-            v-show="password.length > 0 && password.length < 6">
+            v-show="newPassword.length > 0 && newPassword.length < 6">
             Password must have at least 6 digits
           </p>
         </div>
@@ -80,14 +93,14 @@
               type="password"
               v-model="confirmation"
               autocomplete="password"
-              placeholder="Retype your password">
+              placeholder="Retype new password">
             <span class="icon is-small is-left">
               <icon name="lock" label="Lock"></icon>
             </span>
           </p>
           <p
             class="help is-danger"
-            v-show="confirmation.length > 0 && password !== confirmation">
+            v-show="confirmation.length > 0 && newPassword !== confirmation">
             Password does not match confirmation
           </p>
         </div>
@@ -113,7 +126,8 @@ export default {
     return {
       userName: '',
       email: '',
-      password: '',
+      currentPassword: '',
+      newPassword: '',
       confirmation: '',
       localCurrency: null,
       validOrEmptyEmail: true,
@@ -126,13 +140,17 @@ export default {
       const params = {};
       if (this.email) params.email = this.email;
       if (this.userName) params.name = this.userName;
-      if (this.password) params.password = this.userName;
-      if (this.localCurrency) params.localCurrency = this.localCurrency;
+      if (this.currentPassword) params.currentPassword = this.currentPassword;
+      if (this.newPassword) params.password = this.newPassword;
+      if (this.localCurrency) params.localCurrency = this.localCurrency.value;
 
       if (Object.keys(params).length > 0) {
         params.id = this.user.id;
         this.$store.dispatch('updateUser', params)
           .then(() => {
+            this.currentPassword = '';
+            this.newPassword = '';
+            this.confirmation = '';
             this.showSuccessMessage('User updated successfully');
           })
           .catch(error => this.showErrorMessage(error.message));
@@ -154,14 +172,16 @@ export default {
   computed: {
     valid() {
       const emailOk = !this.email || isValidEmail(this.email);
-      const passwordOk = !this.password ||
-                        (this.password.length >= 6 && this.password === this.confirmation);
+      const passwordOk = !this.newPassword ||
+                          (this.newPassword &&
+                          this.newPassword.length >= 6 &&
+                          this.newPassword === this.confirmation);
       return emailOk && passwordOk;
     },
     changed() {
       const nameChanged = this.userName && this.user.name !== this.userName;
       const emailChanged = this.email && this.user.email !== this.email;
-      const passwordChanged = this.password;
+      const passwordChanged = !!this.newPassword;
       const currencyChanged = this.localCurrency &&
                               this.user.localCurrency !== this.localCurrency.value;
 
@@ -184,8 +204,7 @@ export default {
     this.$refs.name.focus();
     this.userName = this.user.name;
     this.email = this.user.email;
-    const currency = this.localCurrencies.find(c => c.name === this.user.localCurrency) ||
-                     this.localCurrencies[0];
+    const currency = this.$store.getters.localCurrency;
     this.localCurrency = { label: `${currency.symbol} - ${currency.name}`, value: currency.name };
   },
   components: {

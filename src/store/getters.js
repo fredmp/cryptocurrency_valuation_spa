@@ -16,4 +16,7 @@ export const user = state => state.user || JSON.parse(localStorage.getItem('user
 
 export const token = state => state.token || localStorage.getItem('token');
 
-export const isAuthenticated = () => localStorage.getItem('token') && localStorage.getItem('user');
+export const localCurrency = (state) => {
+  const u = state.user || JSON.parse(localStorage.getItem('user')) || {};
+  return state.localCurrencies.find(c => c.name === u.localCurrency) || state.localCurrencies[0];
+};
