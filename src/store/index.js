@@ -7,8 +7,8 @@ import * as mutations from './mutations';
 Vue.use(Vuex);
 
 const state = {
-  user: {},
-  token: '',
+  user: null,
+  token: null,
   currencies: [],
   assets: [],
   tracked: [],
@@ -17,6 +17,16 @@ const state = {
   appConfig: {
     menuTrackedCoinsHighlight: false,
   },
+  localCurrencies: [
+    { name: 'USD', symbol: '$' },
+    { name: 'EUR', symbol: '€' },
+    { name: 'JPY', symbol: '¥' },
+    { name: 'GBP', symbol: '£' },
+    { name: 'CAD', symbol: '$' },
+    { name: 'ARS', symbol: '$' },
+    { name: 'CHF', symbol: 'CHF' },
+    { name: 'BRL', symbol: 'R$' },
+  ],
 };
 
 export default new Vuex.Store({

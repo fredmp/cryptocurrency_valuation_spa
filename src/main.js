@@ -28,7 +28,7 @@ Axios.defaults.headers.get.Accepts = 'application/json';
 
 Axios.interceptors.request.use((config) => {
   // Also check the request domain
-  if (store.getters.token) {
+  if (store.getters.token && config.url.startsWith('/')) {
     config.headers.authorization = store.getters.token;
   }
   return config;

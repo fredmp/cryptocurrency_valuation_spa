@@ -95,7 +95,7 @@ export default {
         this.showRequiredMessage = true;
         return;
       }
-      this.$store.dispatch('register', { email: this.email, password: this.password })
+      this.$store.dispatch('createUser', { email: this.email, password: this.password })
         .then(() => this.$router.push('all'))
         .catch(error => this.showErrorMessage(error));
     },

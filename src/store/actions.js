@@ -198,9 +198,21 @@ export const login = async ({ commit }, payload) => {
   }
 };
 
-export const register = async ({ commit }, payload) => {
+export const createUser = async ({ commit }, payload) => {
   try {
-    const response = await Axios.post('/register', payload);
+    const response = await Axios.post('/users', payload);
+    commit('setUser', response.data);
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};
+
+export const updateUser = async ({ commit }, payload) => {
+  try {
+    const response = await Axios.put(`/users/${payload.id}`, payload);
     commit('setUser', response.data);
   } catch (e) {
     if (hasErrorMessage(e)) {
