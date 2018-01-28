@@ -13,17 +13,28 @@
       </div>
 
       <div class="navbar-end">
-        <a href="#" class="navbar-item" @click="$router.push('all')">All Coins</a>
+        <a href="#" class="navbar-item" @click="$router.push('all')" v-show="isAuthenticated">
+          All Coins
+        </a>
         <a
           href="#"
           :class="{ 'navbar-item': true, 'shake2': appConfig.menuTrackedCoinsHighlight }"
-          @click="$router.push('tracked')">
+          @click="$router.push('tracked')"
+           v-show="isAuthenticated">
           Tracked Coins
         </a>
-        <a href="#" class="navbar-item" @click="$router.push('assets')">My Assets</a>
-        <a href="#" class="navbar-item" @click="$router.push('settings')">Settings</a>
-        <a href="#" class="navbar-item" @click="$router.push('login')">Login</a>
-        <a href="#" class="navbar-item" @click="$router.push('register')">Register</a>
+        <a href="#" class="navbar-item" @click="$router.push('assets')" v-show="isAuthenticated">
+          My Assets
+        </a>
+        <a href="#" class="navbar-item" @click="$router.push('settings')" v-show="isAuthenticated">
+          Settings
+        </a>
+        <a href="#" class="navbar-item" @click="$router.push('login')" v-show="!isAuthenticated">
+          Login
+        </a>
+        <a href="#" class="navbar-item" @click="$router.push('register')" v-show="!isAuthenticated">
+          Register
+        </a>
       </div>
     </nav>
 
@@ -51,6 +62,9 @@ export default {
   computed: {
     appConfig() {
       return this.$store.getters.appConfig;
+    },
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
     },
   },
 };

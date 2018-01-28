@@ -189,8 +189,7 @@ export const exchangeRate = async ({ commit }, payload) => {
 export const login = async ({ commit }, payload) => {
   try {
     const response = await Axios.post('/login', payload);
-    commit('user', response.data);
-    commit('token', response.headers.token);
+    commit('setUser', response.data);
   } catch (e) {
     if (hasErrorMessage(e)) {
       throw new Error(e.response.data.message);
@@ -203,7 +202,6 @@ export const register = async ({ commit }, payload) => {
   try {
     const response = await Axios.post('/register', payload);
     commit('setUser', response.data);
-    commit('setToken', response.headers.authorization);
   } catch (e) {
     if (hasErrorMessage(e)) {
       throw new Error(e.response.data.message);

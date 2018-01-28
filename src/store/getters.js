@@ -13,3 +13,5 @@ export const user = state => state.user;
 export const token = state => state.token;
 
 export const valuationSettings = state => state.valuationSettings;
+
+export const isAuthenticated = state => state.token && state.user;

@@ -26,6 +26,21 @@ if (process.env.NODE_ENV === 'production') {
 
 Axios.defaults.headers.get.Accepts = 'application/json';
 
+Axios.interceptors.request.use((config) => {
+  // Also check the request domain
+  if (store.getters.token) {
+    config.headers.authorization = store.getters.token;
+  }
+  return config;
+});
+
+Axios.interceptors.response.use((response) => {
+  const token = response.headers.authorization;
+  // Also check the response origin before to set the token
+  if (token) store.commit('setToken', token);
+  return response;
+});
+
 Vue.component('icon', Icon);
 
 Vue.filter('round', function (value, precision = 2) {
