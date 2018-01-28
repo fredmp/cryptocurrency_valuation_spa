@@ -22,6 +22,8 @@
         </a>
         <a href="#" class="navbar-item" @click="$router.push('assets')">My Assets</a>
         <a href="#" class="navbar-item" @click="$router.push('settings')">Settings</a>
+        <a href="#" class="navbar-item" @click="$router.push('login')">Login</a>
+        <a href="#" class="navbar-item" @click="$router.push('register')">Register</a>
       </div>
     </nav>
 

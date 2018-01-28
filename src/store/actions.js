@@ -185,3 +185,29 @@ export const exchangeRate = async ({ commit }, payload) => {
     throw new Error(`Unable to get exchanged rate for ${payload.symbol}`);
   }
 };
+
+export const login = async ({ commit }, payload) => {
+  try {
+    const response = await Axios.post('/login', payload);
+    commit('user', response.data);
+    commit('token', response.headers.token);
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};
+
+export const register = async ({ commit }, payload) => {
+  try {
+    const response = await Axios.post('/register', payload);
+    commit('setUser', response.data);
+    commit('setToken', response.headers.authorization);
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};

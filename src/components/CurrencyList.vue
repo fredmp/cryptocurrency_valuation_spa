@@ -187,6 +187,8 @@ export default {
       this.loading = false;
       this.$store.dispatch('fetchTrackedCurrencyIds');
     });
+    console.log(this.$store.getters.user);
+    console.log(this.$store.getters.token);
   },
   components: {
     Spinner,

@@ -8,4 +8,8 @@ export const trackedCurrencyIds = state => state.trackedCurrencyIds || [];
 
 export const appConfig = state => state.appConfig;
 
+export const user = state => state.user;
+
+export const token = state => state.token;
+
 export const valuationSettings = state => state.valuationSettings;

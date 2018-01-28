@@ -47,3 +47,11 @@ export const updateValuation = (state, { trackedCurrency, valuationId, value }) 
 export const assets = (state, payload) => {
   state.assets = payload;
 };
+
+export const setUser = (state, user) => {
+  state.user = user;
+};
+
+export const setToken = (state, token) => {
+  state.token = token;
+};

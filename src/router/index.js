@@ -4,6 +4,8 @@ import CurrencyList from '@/components/CurrencyList';
 import Tracked from '@/components/Tracked';
 import Assets from '@/components/Assets';
 import Settings from '@/components/Settings';
+import Register from '@/components/Register';
+import Login from '@/components/Login';
 
 Vue.use(VueRouter);
 
@@ -12,6 +14,8 @@ const routes = [
   { path: '/tracked', name: 'tracked', component: Tracked },
   { path: '/assets', name: 'assets', component: Assets },
   { path: '/settings', name: 'settings', component: Settings },
+  { path: '/register', name: 'register', component: Register },
+  { path: '/login', name: 'login', component: Login },
   { path: '*', redirect: '/' },
 ];
 
