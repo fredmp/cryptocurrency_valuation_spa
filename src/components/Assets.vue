@@ -109,14 +109,15 @@
             <td></td>
             <td></td>
           </tr>
-          <tr>
+          <tr v-show="totalUserCurrency">
             <td></td>
             <td></td>
             <td></td>
             <td class="amount-td"></td>
             <td></td>
-            <!-- Get user currency symbol from configuration -->
-            <td class="has-text-right footer-total">R$ {{ totalUserCurrency | round }}</td>
+            <td class="has-text-right footer-total">
+              {{ userLocalCurrency.symbol }} {{ totalUserCurrency | round }}
+            </td>
             <td></td>
             <td></td>
           </tr>
@@ -148,7 +149,7 @@ export default {
       orderedBy: {},
       orderedAssets: [],
       totalUserCurrency: null,
-      userCurrencyRate: 1,
+      userCurrencyRate: null,
       errorMessage: null,
       headers: [
         { text: '#', value: 'image', align: 'centered' },
@@ -269,7 +270,7 @@ export default {
     },
     calculateTotalUserCurrency(usdValue) {
       this.totalUserCurrency = null;
-      if (true) { // User has a local currency in configuration
+      if (this.userCurrencyRate) {
         this.totalUserCurrency = this.userCurrencyRate * usdValue;
       }
     },
@@ -292,6 +293,12 @@ export default {
         });
       /* eslint-enable arrow-body-style */
     },
+    userLocalCurrency() {
+      return this.$store.getters.localCurrency;
+    },
+    localCurrencyIsUSD() {
+      return this.userLocalCurrency.name === 'USD';
+    },
     assets() {
       return this.$store.getters.assets;
     },
@@ -312,10 +319,13 @@ export default {
       .then(() => {
         this.orderBy();
         this.loading = false;
-        this.$store.dispatch('exchangeRate', { symbol: 'BRL' }).then((rate) => {
-          this.userCurrencyRate = rate;
-          this.calculateTotalUserCurrency(this.totalUsd);
-        });
+
+        if (!this.localCurrencyIsUSD) {
+          this.$store.dispatch('exchangeRate', { symbol: this.userLocalCurrency.name }).then((rate) => {
+            this.userCurrencyRate = rate;
+            this.calculateTotalUserCurrency(this.totalUsd);
+          });
+        }
       })
       .catch((error) => {
         this.loading = false;

@@ -23,7 +23,6 @@ const state = {
     { name: 'JPY', symbol: '¥' },
     { name: 'GBP', symbol: '£' },
     { name: 'CAD', symbol: '$' },
-    { name: 'ARS', symbol: '$' },
     { name: 'CHF', symbol: 'CHF' },
     { name: 'BRL', symbol: 'R$' },
   ],
