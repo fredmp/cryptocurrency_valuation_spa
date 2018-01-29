@@ -34,6 +34,7 @@
               type="password"
               v-model="password"
               v-on:focus="showRequiredMessage = false"
+              v-on:enter="login"
               autocomplete="password"
               placeholder="Password">
             <span class="icon is-small is-left">
