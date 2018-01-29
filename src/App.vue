@@ -83,6 +83,20 @@ export default {
       return this.$store.getters.token && this.$store.getters.user;
     },
   },
+  mounted() {
+    const user = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+
+    if (user && token) {
+      this.$store.commit('setUser', JSON.parse(user));
+      this.$store.commit('setToken', token);
+      this.$router.push('all');
+    } else {
+      this.$store.commit('unsetUser');
+      this.$store.commit('unsetToken');
+      this.$router.push('login');
+    }
+  },
 };
 </script>
 
