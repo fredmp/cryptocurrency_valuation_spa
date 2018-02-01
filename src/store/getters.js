@@ -10,6 +10,8 @@ export const appConfig = state => state.appConfig;
 
 export const valuationSettings = state => state.valuationSettings;
 
+export const presets = state => state.presets || [];
+
 export const localCurrencies = state => state.localCurrencies;
 
 export const user = state => state.user;

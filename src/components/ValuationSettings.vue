@@ -26,6 +26,9 @@
               If you select 2 for a coin the fair price will be 12% less
               <pre>((5 - 2) * 4)</pre>.
             </p>
+            <p>
+              You can start by adding your own valuations or using one of our presets
+            </p>
           </div>
         </div>
       </article>
@@ -34,12 +37,18 @@
       <nav class="level">
         <div class="level-left">
         </div>
+        <div class="level-center">
+          <a
+            class="button is-info" @click="presetsModal = true">Use a preset valuation</a>
+        </div>
         <div class="level-right">
           <a class="button is-info" @click="add()">Add</a>
         </div>
       </nav>
     </div>
-    <div class="block">
+    <preset-valuation-setting-modal :active="presetsModal" @close="presetsModal = false">
+    </preset-valuation-setting-modal>
+    <div class="block" v-show="valuations.length > 0">
       <div class="block">
         <table class="table is-striped is-narrow is-hoverable is-fullwidth">
             <thead>
@@ -140,7 +149,7 @@
         </footer>
       </div>
     </div>
-    <div class="has-text-right" v-show="remainingWeight > 0">
+    <div class="has-text-right" v-show="remainingWeight > 0 && valuations.length > 0">
       <span>Remaining weight to distribute: <strong>{{ remainingWeight }}</strong></span>
     </div>
     <div class="chart">
@@ -152,11 +161,13 @@
 <script>
 import DoughnutChart from '@/components/common/DoughnutChart';
 import Spinner from '@/components/common/Spinner';
+import PresetValuationSettingModal from '@/components/PresetValuationSettingModal';
 import { generateColor } from '@/utils/mixins';
 
 export default {
   data: () => ({
     modal: false,
+    presetsModal: false,
     valuation: { name: '', description: '', maxValue: '', weight: 0 },
     items: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     loading: false,
@@ -204,6 +215,9 @@ export default {
     valuations() {
       return this.$store.getters.valuationSettings;
     },
+    presets() {
+      return this.$store.getters.presets;
+    },
     valid() {
       return typeof this.valuation.maxValue === 'number' &&
         this.valuation.maxValue > 0 &&
@@ -240,6 +254,7 @@ export default {
   components: {
     DoughnutChart,
     Spinner,
+    PresetValuationSettingModal,
   },
 };
 </script>
