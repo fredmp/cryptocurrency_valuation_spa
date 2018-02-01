@@ -39,6 +39,12 @@ Axios.interceptors.response.use((response) => {
   // Also check the response origin before to set the token
   if (token) store.commit('setToken', token);
   return response;
+}, (error) => {
+  if (error.response.status === 401) {
+    store.commit('unsetUser');
+    store.commit('unsetToken');
+    router.push('login');
+  }
 });
 
 Vue.component('icon', Icon);
