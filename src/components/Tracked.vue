@@ -82,8 +82,8 @@
           <td class="table-text has-text-right">{{ t.currency.percentChange1h | round }}</td>
           <td class="table-text has-text-right">{{ t.currency.percentChange24h | round }}</td>
           <td class="table-text has-text-right">{{ t.currency.percentChange7d | round }}</td>
-          <td class="table-text has-text-right">{{ t.currency.price | round }}</td>
-          <td class="table-text has-text-right">{{ t.expectedPrice | round }}</td>
+          <td class="table-text has-text-right">{{ t.currency.price | autoRound }}</td>
+          <td class="table-text has-text-right">{{ t.expectedPrice | autoRound }}</td>
           <td class="table-text has-text-right">{{ t.expectedGrowth | round }} %</td>
         </tr>
       </tbody>

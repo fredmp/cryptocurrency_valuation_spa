@@ -69,14 +69,14 @@
             <td class="table-text has-text-left">{{ c.name }}</td>
             <td class="table-text has-text-centered">{{ c.symbol }}</td>
             <td class="table-text has-text-right">{{ c.marketCap | round }}</td>
-            <td class="table-text has-text-right">{{ c.price | round }}</td>
+            <td class="table-text has-text-right">{{ c.price | autoRound }}</td>
             <td class="table-text has-text-right">{{ c.volume24h | round }}</td>
             <td class="table-text has-text-right">{{ c.percentChange1h | round }}</td>
             <td class="table-text has-text-right">{{ c.percentChange24h | round }}</td>
             <td class="table-text has-text-right">{{ c.percentChange7d | round }}</td>
             <td class="table-text has-text-centered">{{ c.liquidity }}</td>
             <td class="table-text has-text-centered">{{ c.inflationary | humanizeBoolean }}</td>
-            <td class="table-text has-text-right">{{ c.maxPrice | round }}</td>
+            <td class="table-text has-text-right">{{ c.maxPrice | autoRound }}</td>
             <td class="table-text has-text-right">{{ c.growthPotential | round }} %</td>
           </tr>
         </tbody>

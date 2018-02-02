@@ -56,6 +56,14 @@ Vue.filter('round', function (value, precision = 2) {
   return parseFloat(value).toFixed(precision);
 });
 
+Vue.filter('autoRound', function (value) {
+  if (!value) {
+    value = 0;
+  }
+  const precision = value >= 1 ? 2 : 6;
+  return parseFloat(value).toFixed(precision);
+});
+
 Vue.filter('humanizeBoolean', function (value) {
   if (value === undefined || value === null) {
     return '';

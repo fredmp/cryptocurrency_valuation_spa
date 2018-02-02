@@ -85,7 +85,7 @@
               </div>
             </td>
             <td class="table-text has-text-right padding-right">{{ a.btcValue | round(8) }}</td>
-            <td class="table-text has-text-right padding-right">{{ a.usdValue | round }}</td>
+            <td class="table-text has-text-right padding-right">{{ a.usdValue | autoRound }}</td>
             <td class="table-text has-text-centered is-short">
               <a @click.capture="editing = a.id" class="is-info">
                 <icon name="edit" label="Edit"></icon>

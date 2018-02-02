@@ -24,7 +24,7 @@
             <input
               class="input pointer has-text-centered"
               type="text"
-              :value="selected.currency.price | money"
+              :value="selected.currency.price | autoRound | money"
               readonly>
             <icon
               :name="`arrow-${priceStatus(selected.currency)}`"
@@ -154,7 +154,7 @@
             <input
               class="input pointer has-text-centered"
               type="text"
-              :value="selected.currency.maxPrice | money"
+              :value="selected.currency.maxPrice | autoRound | money"
               readonly>
           </div>
         </div>
@@ -170,7 +170,7 @@
             <input
               class="input pointer has-text-centered"
               type="text"
-              :value="selected.expectedPrice | money"
+              :value="selected.expectedPrice | autoRound | money"
               readonly>
           </div>
         </div>
