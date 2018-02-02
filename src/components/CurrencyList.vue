@@ -2,7 +2,19 @@
   <div class="block">
     <div class="block">
       <nav class="level">
-        <div class="level-left"></div>
+        <div class="level-left">
+          <article class="message is-warning" v-show="valuations.length === 0 && !hideNotification">
+            <div class="message-header">
+              <p>Suggestion: Add Valuation Settings</p>
+              <button class="delete" aria-label="delete" @click="hideNotification = true"></button>
+            </div>
+            <div class="message-body">
+              <a @click="$router.push('settings')">
+                It seems you don't have any valuation settings. You can click here to add it now!
+              </a>
+            </div>
+          </article>
+        </div>
         <div class="level-right">
           <div class="field has-addons">
             <p class="control">
@@ -50,6 +62,12 @@
             <button class="button" @click="closeModal">Cancel</button>
           </footer>
         </div>
+      </div>
+      <div class="tip">
+        <p>
+          <icon name="info-circle" label="Info"></icon>
+          <span>&nbsp;You can click on a coin to start monitoring it</span>
+        </p>
       </div>
       <table class="table is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
@@ -116,6 +134,7 @@ export default {
       loading: false,
       modal: false,
       trackErrorMessage: '',
+      hideNotification: false,
     };
   },
   watch: {
@@ -179,6 +198,9 @@ export default {
     trackedCurrencyIds() {
       return this.$store.getters.trackedCurrencyIds;
     },
+    valuations() {
+      return this.$store.getters.valuationSettings;
+    },
   },
   mounted() {
     this.loading = true;
@@ -196,20 +218,46 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-  .has-addons {
-    margin-top: 40px;
-    margin-bottom: 25px;
-  }
-  .search-bar {
-    width: 300px;
-  }
-  .notification {
-    padding: 8px;
-    margin: 15px 0 0 0;
-  }
-  tr.tracked {
-    border-left-color: lighten(#3273dc, 20%);
-    border-left-width: 2px;
-    border-left-style: solid;
-  }
+.has-addons, article.message {
+  margin-top: 40px;
+  margin-bottom: 5px;
+}
+.search-bar {
+  width: 300px;
+}
+.notification {
+  padding: 8px;
+  margin: 15px 0 0 0;
+}
+tr.tracked {
+  border-left-color: lighten(#3273dc, 20%);
+  border-left-width: 2px;
+  border-left-style: solid;
+}
+.tip {
+  padding-bottom: 10px;
+  float: right;
+}
+.tip > p {
+  margin: auto;
+  padding-right: 2px;
+  font-size: 0.8em;
+  color: darkgrey;
+}
+.tip > p > span {
+  vertical-align: middle;
+}
+.tip > p > svg {
+  padding: 0px;
+  margin: 0px;
+  display: inline;
+  vertical-align: middle;
+  color: darkgrey;
+}
+article > .message-body, article > .message-header {
+  color: rgb(120, 120, 120) !important;
+}
+article > .message-body > a {
+  text-decoration: none !important;
+}
 </style>
