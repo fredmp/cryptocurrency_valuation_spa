@@ -134,7 +134,7 @@ export default {
       loading: false,
       modal: false,
       trackErrorMessage: '',
-      hideNotification: false,
+      hideNotification: true,
     };
   },
   watch: {
@@ -208,6 +208,11 @@ export default {
       this.orderBy('rank');
       this.loading = false;
       this.$store.dispatch('fetchTrackedCurrencyIds');
+    });
+  },
+  created() {
+    this.$store.dispatch('fetchValuationSettings').then(() => {
+      if (this.valuations.length === 0) this.hideNotification = false;
     });
   },
   components: {
