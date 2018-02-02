@@ -39,14 +39,20 @@
         </div>
         <div class="level-center">
           <a
-            class="button is-info" @click="presetsModal = true">Use a preset valuation</a>
+            class="button is-info"
+            v-show="remainingPresets.length > 0"
+            @click="presetsModal = true">
+            Use a preset valuation
+          </a>
         </div>
         <div class="level-right">
           <a class="button is-info" @click="add()">Add</a>
         </div>
       </nav>
     </div>
-    <preset-valuation-setting-modal :active="presetsModal" @close="presetsModal = false">
+    <preset-valuation-setting-modal
+      :active="presetsModal"
+      @close="presetsModal = false">
     </preset-valuation-setting-modal>
     <div class="block" v-show="valuations.length > 0">
       <div class="block">
@@ -59,17 +65,21 @@
               </th>
             </thead>
             <tbody>
-              <tr v-for="v in valuations" :key="v.description">
-                <td class="table-text has-text-left">{{ v.name }}</td>
-                <td class="table-text has-text-left">{{ v.description }}</td>
-                <td class="table-text has-text-centered">{{ v.maxValue }}</td>
-                <td class="table-text has-text-centered">{{ v.weight }} %</td>
-                <td class="table-text has-text-centered is-short">
+              <tr v-for="v in valuations" :key="v.name + '-valuation'">
+                <td :key="v.id + '-name'" class="table-text has-text-left">
+                  {{ v.name }}</td>
+                <td :key="v.id + '-description'" class="table-text has-text-left">
+                  {{ v.description }}</td>
+                <td :key="v.id + '-maxValue'" class="table-text has-text-centered">
+                  {{ v.maxValue }}</td>
+                <td :key="v.id + '-weight'" class="table-text has-text-centered">
+                  {{ v.weight }} %</td>
+                <td :key="v.id + '-edit'" class="table-text has-text-centered is-short">
                   <a @click.capture="edit(v.id)" class="is-info">
                     <icon name="edit" label="Edit"></icon>
                   </a>
                 </td>
-                <td class="table-text has-text-centered is-short">
+                <td :key="v.id + '-remove'" class="table-text has-text-centered is-short">
                   <a @click.capture="remove(v.id)" class="is-danger">
                     <icon name="times" label="Remove"></icon>
                   </a>
@@ -189,14 +199,17 @@ export default {
     save() {
       if (!this.valid) return;
       if (this.valuation.id) {
-        this.$store.dispatch('updateValuationSetting', this.valuation);
+        this.$store.dispatch('updateValuationSetting', this.valuation)
+          .then(() => this.$store.dispatch('fetchValuationSettings'));
       } else {
-        this.$store.dispatch('addValuationSetting', this.valuation);
+        this.$store.dispatch('addValuationSetting', this.valuation)
+          .then(() => this.$store.dispatch('fetchValuationSettings'));
       }
       this.clear();
     },
     remove(valuationId) {
-      this.$store.dispatch('removeValuationSetting', valuationId);
+      this.$store.dispatch('removeValuationSetting', valuationId)
+        .then(() => this.$store.dispatch('fetchValuationSettings'));
     },
     edit(valuationId) {
       const found = this.valuations.find(v => v.id === valuationId);
@@ -218,6 +231,9 @@ export default {
     presets() {
       return this.$store.getters.presets;
     },
+    remainingPresets() {
+      return this.$store.getters.remainingPresets;
+    },
     valid() {
       return typeof this.valuation.maxValue === 'number' &&
         this.valuation.maxValue > 0 &&
@@ -234,10 +250,7 @@ export default {
         }));
     },
     remainingWeight() {
-      // eslint-disable-next-line arrow-body-style
-      return 100 - this.valuations.reduce((accumulator, valuation) => {
-        return accumulator + parseFloat(valuation.weight);
-      }, 0);
+      return this.$store.getters.remainingValuationWeight;
     },
     validSelectedWeight() {
       const diff = this.valuation.weight - this.originalWeight;

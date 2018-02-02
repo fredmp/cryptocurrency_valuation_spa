@@ -24,3 +24,9 @@ export const localCurrency = (state) => {
   const u = state.user || JSON.parse(localStorage.getItem('user')) || {};
   return state.localCurrencies.find(c => c.name === u.localCurrency) || state.localCurrencies[0];
 };
+
+export const remainingValuationWeight = state => 100 - state.valuationSettings
+  .reduce((accumulator, valuation) => accumulator + parseFloat(valuation.weight), 0);
+
+export const remainingPresets = state => state.presets
+  .filter(p => !state.valuationSettings.find(v => v.name === p.name));

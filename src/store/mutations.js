@@ -18,6 +18,10 @@ export const addValuationSetting = (state, payload) => {
   state.valuationSettings.push(payload);
 };
 
+export const addValuationSettings = (state, newValuationSettings) => {
+  newValuationSettings.forEach(v => state.valuationSettings.push(v));
+};
+
 export const updateValuationSetting = (state, { id, name, description, maxValue, weight }) => {
   const valuation = state.valuationSettings.find(v => v.id === id);
   if (valuation) {

@@ -31,6 +31,15 @@ export const addValuationSetting = async ({ commit }, payload) => {
   }
 };
 
+export const addValuationSettings = async ({ commit }, batch) => {
+  try {
+    const response = await Axios.post('/valuation-settings/batch_create', { batch });
+    commit('addValuationSettings', response.data);
+  } catch (e) {
+    // Handle errors
+  }
+};
+
 export const updateValuationSetting = async ({ commit }, payload) => {
   try {
     const response = await Axios.put(`/valuation-settings/${payload.id}`, payload);
