@@ -70,7 +70,7 @@
                 <span
                   v-show="editing !== a.id"
                   @click="editing = a.id">
-                  {{ a.amount | round }}
+                  {{ a.amount | round(8) }}
                 </span>
                 <input
                   v-show="editing === a.id"
@@ -263,7 +263,7 @@ export default {
     currencyIcon(name) {
       try {
         const baseUrl = 'https://files.coinmarketcap.com/static/img/coins/32x32';
-        return `${baseUrl}/${name.replace(/\s/g, '-').toLowerCase()}.png`;
+        return `${baseUrl}/${name.replace(/\s/g, '-').replace(/\./g, '').toLowerCase()}.png`;
       } catch (e) {
         return '';
       }
