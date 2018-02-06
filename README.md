@@ -24,8 +24,8 @@ yarn deploy
 - Add unit tests
 - Add e2e tests
 - Apply some refactoring to extract code to specific components
-- Improve assets page to allow the user to register not only the amount but also when a coin is bought or sold and associated costs. That will provide a more accurate overview as well as information such as mean price.
-- Create an initial page to show in the root path. It could display news and useful graphs for example. The current
+- Improve assets page to allow the user to register not only the amount but also when a coin is bought or sold and associated costs. That will provide a more accurate overview as well as information such as mean price
+- Create an initial page to show in the root path. It could display news and useful graphs for example
 
 ## Contributing
 
