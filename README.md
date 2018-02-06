@@ -1,30 +1,44 @@
-# crypto_currency_valuation_spa
+# CryptoCurrency Valuation Tool
 
-> A VueJS project to organize information about crypto currencies
+This is a simple project that aims to provide tools to help users create their own rules to evaluate cryptocurrency assets (alt coins) and organize their assets.
 
-## Build Setup
+- Max price is an initial info based on BTC market cap (dominant coin) and the target coin supply. Basically: What would be the price if this coin had the same market cap as BTC?
+- Potential growth is the difference between max price and current price
+- The user can create custom valuation settings
+- Once a coin is tracked it's possible to rate it based on the valuation settings previously defined. These rules will affect the potential growth to generate the expected price and expected growth
 
-``` bash
-# install dependencies
-npm install
+##### It works by accessing [cryptocurrency_valuation_api](https://github.com/fredmp/cryptocurrency_valuation_api)
 
-# serve with hot reload at localhost:8080
-npm run dev
+##### The data comes from the public [CoinMarketCap](https://coinmarketcap.com) API. It's updated every 15 minutes and respects the usage limits.
 
-# build for production with minification
-npm run build
+##### Once yarn is installed you can run, build and deploy it by using:
 
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
+```
+yarn dev
+yarn build
+yarn deploy
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Next (possible) steps
+
+- Add unit tests
+- Add e2e tests
+- Apply some refactoring to extract code to specific components
+- Improve assets page to allow the user to register not only the amount but also when a coin is bought or sold and associated costs. That will provide a more accurate overview as well as information such as mean price.
+- Create an initial page to show in the root path. It could display news and useful graphs for example. The current
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request
+
+## Legal
+
+Cosmos Tecnologia &copy; 2017-2018
+
+[@fredmp](https://twitter.com/fredmp)
+
+[Licensed under the MIT license](https://opensource.org/licenses/mit-license.php)
