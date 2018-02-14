@@ -1,6 +1,10 @@
 <template>
   <div class="block">
-    <div class="notification is-danger error-message-div" v-show="errorMessage">
+    <div class="notification is-warning" v-show="infoMessage">
+      <button class="delete" @click="infoMessage = null"></button>
+      <span>{{ infoMessage }}</span>
+    </div>
+    <div class="notification is-danger" v-show="errorMessage">
       <button class="delete" @click="errorMessage = null"></button>
       <span>{{ errorMessage }}</span>
     </div>
@@ -27,7 +31,7 @@
             Email is required
           </p>
         </div>
-        <div class="field">
+        <div class="field password-div">
           <p class="control has-icons-left">
             <input
               class="input"
@@ -45,11 +49,10 @@
             Password is required
           </p>
         </div>
+        <a class="forgot-password" @click="forgotPassword">Forgot Password?</a>
         <div class="field">
           <p class="control has-text-right">
-            <button class="button is-info" @click="login">
-              Login
-            </button>
+            <button class="button is-info" @click="login">Login</button>
           </p>
         </div>
       </form>
@@ -60,12 +63,14 @@
 <script>
 export default {
   name: 'Login',
+  props: ['initialEmail', 'initialMessage'],
   data() {
     return {
-      email: '',
+      email: this.initialEmail || '',
       password: '',
       showRequiredMessage: false,
       errorMessage: null,
+      infoMessage: this.initialMessage,
     };
   },
   methods: {
@@ -77,6 +82,9 @@ export default {
       this.$store.dispatch('login', { email: this.email, password: this.password })
         .then(() => this.$router.push('all'))
         .catch(error => this.showErrorMessage(error));
+    },
+    forgotPassword() {
+      this.$router.push({ name: 'forgotPassword', query: { email: this.email } });
     },
     showErrorMessage(error) {
       this.errorMessage = (error.message || 'An error has occurred').toString().substr(0, 200);
@@ -95,5 +103,12 @@ export default {
 }
 .notification {
   margin-top: 20px;
+}
+.password-div {
+  margin-bottom: 2px;
+}
+.forgot-password {
+  font-size: 0.8rem;
+  padding-left: 4px;
 }
 </style>
