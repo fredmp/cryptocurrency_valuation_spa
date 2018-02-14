@@ -43,6 +43,7 @@ Axios.interceptors.response.use((response) => {
   if (error.response.status === 401) {
     store.commit('unsetUser');
     store.commit('unsetToken');
+    if (error.config.url.endsWith('login')) throw new Error(error.response.data.message);
     router.push('login');
   }
 });
