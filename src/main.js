@@ -46,6 +46,7 @@ Axios.interceptors.response.use((response) => {
     if (error.config.url.endsWith('login')) throw new Error(error.response.data.message);
     router.push('login');
   }
+  return error.response;
 });
 
 Vue.component('icon', Icon);

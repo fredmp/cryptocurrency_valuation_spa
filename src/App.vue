@@ -94,7 +94,7 @@ export default {
     } else {
       this.$store.commit('unsetUser');
       this.$store.commit('unsetToken');
-      this.$router.push('login');
+      if (this.$route.name !== 'redefinePassword') this.$router.push('login');
     }
   },
 };

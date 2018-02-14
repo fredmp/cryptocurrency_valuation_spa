@@ -243,3 +243,28 @@ export const updateUser = async ({ commit }, payload) => {
     throw e;
   }
 };
+
+// eslint-disable-next-line no-unused-vars
+export const recoverPassword = async ({ commit }, payload) => {
+  try {
+    await Axios.post('/users/password_recovery', payload);
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};
+
+// eslint-disable-next-line no-unused-vars
+export const redefinePassword = async ({ commit }, payload) => {
+  try {
+    const response = await Axios.post('/users/redefine_password', payload);
+    if (response.status !== 200) throw new Error(response.data.message);
+  } catch (e) {
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw e;
+  }
+};

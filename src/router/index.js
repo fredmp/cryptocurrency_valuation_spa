@@ -6,6 +6,8 @@ import Assets from '@/components/Assets';
 import Settings from '@/components/Settings';
 import Register from '@/components/Register';
 import Login from '@/components/Login';
+import ForgotPassword from '@/components/ForgotPassword';
+import RedefinePassword from '@/components/RedefinePassword';
 import Store from './../store/index';
 
 Vue.use(VueRouter);
@@ -24,7 +26,24 @@ const routes = [
   { path: '/assets', name: 'assets', component: Assets, beforeEnter: checkAuthentication },
   { path: '/settings', name: 'settings', component: Settings, beforeEnter: checkAuthentication },
   { path: '/register', name: 'register', component: Register },
-  { path: '/login', name: 'login', component: Login },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login,
+    props: route => ({ initialEmail: route.query.email, initialMessage: route.query.message }),
+  },
+  {
+    path: '/forgot-password',
+    name: 'forgotPassword',
+    component: ForgotPassword,
+    props: route => ({ initialEmail: route.query.email }),
+  },
+  {
+    path: '/redefine-password',
+    name: 'redefinePassword',
+    component: RedefinePassword,
+    props: route => ({ token: route.query.token }),
+  },
   { path: '*', redirect: '/' },
 ];
 
