@@ -47,4 +47,10 @@ const routes = [
   { path: '*', redirect: '/' },
 ];
 
-export default new VueRouter({ mode: 'history', routes });
+const router = new VueRouter({ mode: 'history', routes });
+
+router.isPublic = function (routeName) {
+  return !routes.find(route => route.name === routeName && !!route.beforeEnter);
+};
+
+export default router;
