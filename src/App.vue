@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <section>
     <nav class="navbar is-link">
       <div class="navbar-brand">
         <a class="navbar-item" href="">
-          <h1 class="title is-5">Crypto Currency Valuation Tool</h1>
+          <h1 class="main-title is-5">Crypto Currency Valuation Tool</h1>
         </a>
         <div class="navbar-burger burger" data-target="navMenuColorlink-example">
           <span></span>
@@ -13,6 +13,9 @@
       </div>
 
       <div class="navbar-end">
+        <a class="navbar-item" @click="$router.push('home')">
+          Home
+        </a>
         <a class="navbar-item" @click="$router.push('all')" v-show="isAuthenticated">
           All Coins
         </a>
@@ -40,7 +43,7 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div class="container is-fluid">
       <div class="notification is-danger" v-show="errorMessage">
         <button class="delete" @click="errorMessage = null"></button>
         <span>{{ errorMessage }}</span>
@@ -55,7 +58,7 @@
         </p>
       </div>
     </footer>
-  </div>
+  </section>
 </template>
 
 <script>

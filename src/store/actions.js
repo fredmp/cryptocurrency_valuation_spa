@@ -4,6 +4,15 @@ const hasErrorMessage = function (e) {
   return e.response && e.response.data && e.response.data.message;
 };
 
+export const fetchPopular = async ({ commit }) => {
+  try {
+    const response = await Axios.get('/currencies/popular');
+    commit('popular', response.data);
+  } catch (e) {
+    // Handle errors
+  }
+};
+
 export const fetchCurrencies = async ({ commit }) => {
   try {
     const response = await Axios.get('/currencies');

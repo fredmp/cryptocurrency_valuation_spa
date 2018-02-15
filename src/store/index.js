@@ -9,6 +9,7 @@ Vue.use(Vuex);
 const state = {
   user: null,
   token: null,
+  popular: [],
   currencies: [],
   assets: [],
   tracked: [],

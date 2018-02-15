@@ -1,3 +1,7 @@
+export const popular = (state, payload) => {
+  state.popular = payload;
+};
+
 export const currencies = (state, payload) => {
   state.currencies = payload;
 };
