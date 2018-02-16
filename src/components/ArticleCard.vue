@@ -4,17 +4,22 @@
       <div class="media">
         <div class="media-left">
           <figure class="image is-64x64">
-            <img :src="imageUrl()" alt="Placeholder image">
+            <a :href="article.url" target="_blank">
+              <img :src="article.imageUrl || '../assets/images/96x96.png'" alt="Placeholder image">
+            </a>
           </figure>
         </div>
         <div class="media-content">
-          <p class="title is-5">
-            {{ formattedTitle() }}
-          </p>
+          <a :href="article.url" target="_blank">
+            <p class="title is-6">
+              {{ !!article.source ? `${article.source} - ` : '' }}{{ article.title }}
+            </p>
+          </a>
           <span>
-            {{ formattedDescription() }}
+            {{ !!article.author ? `By ${article.author}: ` : '' }}{{ article.description }}
           </span>
-          <a class="read-more">Read more</a>
+          <div class="div-bottom"></div>
+          <a :href="article.url" target="_blank" class="read-more">Read more</a>
         </div>
       </div>
     </div>
@@ -25,23 +30,6 @@
 export default {
   name: 'ArticleCard',
   props: ['article'],
-  methods: {
-    formattedTitle() {
-      if (this.article.title.length > 40) {
-        return `${this.article.title.substr(0, 40)}...`;
-      }
-      return this.article.title;
-    },
-    formattedDescription() {
-      if (this.article.description.length > 180) {
-        return `${this.article.description.substr(0, 180)}...`;
-      }
-      return this.article.description;
-    },
-    imageUrl() {
-      return this.article.imageUrl || '../assets/images/96x96.png';
-    },
-  },
 };
 </script>
 
@@ -59,7 +47,19 @@ export default {
 }
 .read-more {
   position: absolute;
-  right: 8px;
-  bottom: 6px;
+  right: 4px;
+  bottom: 0px;
+  padding-left: 10px;
+  background-color: white;
+  font-size: 0.8rem;
+  color: rgba(120, 120, 120, 0.5);
+}
+.div-bottom {
+  position: absolute;
+  background-color: white;
+
+  width: 100%;
+  bottom: 0px;
+  padding-bottom: 3px;
 }
 </style>
