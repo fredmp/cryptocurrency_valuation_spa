@@ -4,7 +4,7 @@
       <div class="media">
         <div class="media-left">
           <figure class="image is-64x64">
-            <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
+            <img :src="imageUrl()" alt="Placeholder image">
           </figure>
         </div>
         <div class="media-content">
@@ -12,7 +12,7 @@
             {{ formattedTitle() }}
           </p>
           <span>
-            {{ formattedContent() }}
+            {{ formattedDescription() }}
           </span>
           <a class="read-more">Read more</a>
         </div>
@@ -23,20 +23,23 @@
 
 <script>
 export default {
-  name: 'CardNews',
-  props: ['news'],
+  name: 'ArticleCard',
+  props: ['article'],
   methods: {
     formattedTitle() {
-      if (this.news.title.length > 40) {
-        return `${this.news.title.substr(0, 40)}...`;
+      if (this.article.title.length > 40) {
+        return `${this.article.title.substr(0, 40)}...`;
       }
-      return this.news.title;
+      return this.article.title;
     },
-    formattedContent() {
-      if (this.news.content.length > 180) {
-        return `${this.news.content.substr(0, 180)}...`;
+    formattedDescription() {
+      if (this.article.description.length > 180) {
+        return `${this.article.description.substr(0, 180)}...`;
       }
-      return this.news.content;
+      return this.article.description;
+    },
+    imageUrl() {
+      return this.article.imageUrl || '../assets/images/96x96.png';
     },
   },
 };

@@ -97,7 +97,7 @@ export default {
     } else {
       this.$store.commit('unsetUser');
       this.$store.commit('unsetToken');
-      if (!this.$router.isPublic(this.$route.name)) this.$router.push('login');
+      if (!this.$router.isPublic(this.$route.name)) this.$router.push('home');
     }
   },
 };

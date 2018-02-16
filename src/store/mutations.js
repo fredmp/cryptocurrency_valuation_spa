@@ -6,6 +6,10 @@ export const currencies = (state, payload) => {
   state.currencies = payload;
 };
 
+export const articles = (state, payload) => {
+  state.articles = payload;
+};
+
 export const tracked = (state, payload) => {
   state.tracked = payload;
 };

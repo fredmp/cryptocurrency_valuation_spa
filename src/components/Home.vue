@@ -7,7 +7,7 @@
     <div class="tile is-ancestor">
       <div class="tile is-child">
         <p class="title">News</p>
-        <news-card v-for="n in newsList" :news="n" :key="n.id"></news-card>
+        <article-card v-for="a in articles" :article="a" :key="a.id"></article-card>
       </div>
       <div class="tile is-child is-4">
         <p class="title">Popular</p>
@@ -18,19 +18,19 @@
 </template>
 
 <script>
-import NewsCard from '@/components/NewsCard';
+import ArticleCard from '@/components/ArticleCard';
 import CurrencyCard from '@/components/CurrencyCard';
 
 export default {
   name: 'Home',
   data() {
     return {
-      newsList: [{ id: 1, title: 'Lorem '.repeat(20), content: 'Lorem '.repeat(10) }, { id: 2, title: 'Lorem '.repeat(10), content: 'Lorem '.repeat(400) }, { id: 3, title: 'Lorem '.repeat(10), content: 'Lorem '.repeat(200) }, { id: 4, title: 'Lorem '.repeat(10), content: 'Lorem '.repeat(180) }],
       errorMessage: null,
     };
   },
   mounted() {
     this.$store.dispatch('fetchPopular');
+    this.$store.dispatch('fetchArticles');
   },
   methods: {
     showErrorMessage(error) {
@@ -41,9 +41,12 @@ export default {
     currencies() {
       return this.$store.getters.popular;
     },
+    articles() {
+      return this.$store.getters.articles;
+    },
   },
   components: {
-    NewsCard,
+    ArticleCard,
     CurrencyCard,
   },
 };

@@ -22,6 +22,15 @@ export const fetchCurrencies = async ({ commit }) => {
   }
 };
 
+export const fetchArticles = async ({ commit }) => {
+  try {
+    const response = await Axios.get('/articles');
+    commit('articles', response.data);
+  } catch (e) {
+    // Handle errors
+  }
+};
+
 export const fetchValuationSettings = async ({ commit }) => {
   try {
     const response = await Axios.get('/valuation-settings');

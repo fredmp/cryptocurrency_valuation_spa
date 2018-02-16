@@ -11,6 +11,7 @@ const state = {
   token: null,
   popular: [],
   currencies: [],
+  articles: [],
   assets: [],
   tracked: [],
   trackedCurrencyIds: [],

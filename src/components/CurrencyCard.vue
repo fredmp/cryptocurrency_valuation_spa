@@ -15,7 +15,7 @@
             {{ currency.percentChange1h }}%
           </p>
           <p :class="'title currency-price'">
-            $ {{ currency.price }}
+            $ {{ currency.price | autoRound }}
           </p>
         </div>
       </div>
