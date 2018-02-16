@@ -57,9 +57,8 @@ export default {
 .div-bottom {
   position: absolute;
   background-color: white;
-
   width: 100%;
   bottom: 0px;
-  padding-bottom: 3px;
+  padding-bottom: 15px;
 }
 </style>
