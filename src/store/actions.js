@@ -17,6 +17,9 @@ export const fetchCurrencies = async ({ commit }) => {
   try {
     const response = await Axios.get('/currencies');
     commit('currencies', response.data);
+    if (response.data.length > 0) {
+      commit('popular', response.data.slice(0, 21));
+    }
   } catch (e) {
     // Handle errors
   }
