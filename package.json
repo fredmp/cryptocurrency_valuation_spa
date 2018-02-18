@@ -6,18 +6,20 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
+    "start": "node server.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
     "build": "node build/build.js",
-    "deploy": "git push heroku `git subtree split --prefix dist master`:master --force"
+    "deploy": "git push heroku master --force",
+    "post-install": "npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "dependencies": {
     "axios": "^0.17.1",
     "bulma": "^0.6.2",
     "chart.js": "^2.7.1",
+    "express": "^4.16.2",
     "lodash": "^4.17.4",
     "vue": "^2.5.2",
     "vue-awesome": "^2.3.4",
