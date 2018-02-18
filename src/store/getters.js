@@ -1,6 +1,10 @@
+export const popular = state => state.popular || [];
+
 export const currencies = state => state.currencies || [];
 
 export const assets = state => state.assets || [];
+
+export const articles = state => state.articles || [];
 
 export const tracked = state => state.tracked || [];
 

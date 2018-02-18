@@ -4,10 +4,31 @@ const hasErrorMessage = function (e) {
   return e.response && e.response.data && e.response.data.message;
 };
 
+export const fetchPopular = async ({ commit }) => {
+  try {
+    const response = await Axios.get('/currencies/popular');
+    commit('popular', response.data);
+  } catch (e) {
+    // Handle errors
+  }
+};
+
 export const fetchCurrencies = async ({ commit }) => {
   try {
     const response = await Axios.get('/currencies');
     commit('currencies', response.data);
+    if (response.data.length > 0) {
+      commit('popular', response.data.slice(0, 21));
+    }
+  } catch (e) {
+    // Handle errors
+  }
+};
+
+export const fetchArticles = async ({ commit }) => {
+  try {
+    const response = await Axios.get('/articles');
+    commit('articles', response.data);
   } catch (e) {
     // Handle errors
   }

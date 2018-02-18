@@ -34,6 +34,39 @@
       </nav>
     </div>
     <div class="block">
+      <div :class="{ 'modal': true, 'is-active': maxPriceInfoModal}">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">
+              Max Price and Growth Potential
+            </p>
+            <button
+              class="delete"
+              aria-label="close"
+              @click="maxPriceInfoModal = false"></button>
+          </header>
+          <section class="modal-card-body">
+            <p>
+              <strong>Max price</strong>:
+              What could be the price if this coin had the same market cap
+              of the dominant coin (BTC)?
+              It takes into account the supply of the target coin.
+              But characteristics like inflation and other penalties
+              must be computed through valuation settings.
+            </p>
+            <p>
+              <strong>Growth potential</strong>:
+              is a comparison between current price and max price
+            </p>
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button" @click="maxPriceInfoModal = false">Close</button>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <div class="block">
       <div :class="{ 'modal': true, 'is-active': modal}">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -72,7 +105,19 @@
       <table class="table is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
           <th v-for="h in headers" :key="h.value">
-            <td :id="h.value" :class="'table-header table-text has-text-' + h.align">
+            <td
+              :id="h.value"
+              :class="'table-header table-text has-text-' + h.align"
+              v-if="h.value === 'maxPrice' || h.value === 'growthPotential'">
+              <a @click="orderBy(h.value)">{{ h.text }}</a>
+              <a @click="maxPriceInfoModal = true">
+                <icon name="question-circle" label="Info"></icon>
+              </a>
+            </td>
+            <td
+              :id="h.value"
+              :class="'table-header table-text has-text-' + h.align"
+              v-else>
               <a @click="orderBy(h.value)">{{ h.text }}</a>
             </td>
           </th>
@@ -135,6 +180,7 @@ export default {
       modal: false,
       trackErrorMessage: '',
       hideNotification: true,
+      maxPriceInfoModal: false,
     };
   },
   watch: {

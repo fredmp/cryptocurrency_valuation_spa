@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Home from '@/components/Home';
 import CurrencyList from '@/components/CurrencyList';
 import Tracked from '@/components/Tracked';
 import Assets from '@/components/Assets';
@@ -21,7 +22,8 @@ const checkAuthentication = function (to, from, next) {
 };
 
 const routes = [
-  { path: '/', name: 'all', component: CurrencyList, beforeEnter: checkAuthentication },
+  { path: '/', name: 'home', component: Home },
+  { path: '/all', name: 'all', component: CurrencyList, beforeEnter: checkAuthentication },
   { path: '/tracked', name: 'tracked', component: Tracked, beforeEnter: checkAuthentication },
   { path: '/assets', name: 'assets', component: Assets, beforeEnter: checkAuthentication },
   { path: '/settings', name: 'settings', component: Settings, beforeEnter: checkAuthentication },

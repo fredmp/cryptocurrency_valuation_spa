@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <section>
     <nav class="navbar is-link">
       <div class="navbar-brand">
         <a class="navbar-item" href="">
-          <h1 class="title is-5">Crypto Currency Valuation Tool</h1>
+          <h1 class="main-title is-5">Crypto Currency Valuation Tool</h1>
         </a>
         <div class="navbar-burger burger" data-target="navMenuColorlink-example">
           <span></span>
@@ -13,6 +13,9 @@
       </div>
 
       <div class="navbar-end">
+        <a class="navbar-item" @click="$router.push('home')">
+          Home
+        </a>
         <a class="navbar-item" @click="$router.push('all')" v-show="isAuthenticated">
           All Coins
         </a>
@@ -40,7 +43,7 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div class="container is-fluid">
       <div class="notification is-danger" v-show="errorMessage">
         <button class="delete" @click="errorMessage = null"></button>
         <span>{{ errorMessage }}</span>
@@ -51,11 +54,26 @@
     <footer class="footer">
       <div class="content has-text-centered">
         <p>
-          <strong>Crypto Currency Valuation Tool</strong> by <a href="http://about.me/fredericomartins">Frederico Martins</a> for <a href="https://www.linkedin.com/company/cosmos-tecnologia/">Cosmos Tecnologia</a> - 2018
+          <strong>Crypto Currency Valuation Tool</strong>
+          by <a href="http://about.me/fredericomartins" target="_blank">Frederico Martins</a>
+          for <a href="https://www.linkedin.com/company/cosmos-tecnologia/" target="_blank">Cosmos Tecnologia</a> - 2018
+        </p>
+      </div>
+      <div class="content has-text-centered">
+        <p>
+          <strong>Powered by:</strong>
+          <a href="https://vuejs.org/" target="_blank">Vue.js</a> -
+          <a href="https://coinmarketcap.com" target="_blank">CoinMarketCap</a> -
+          <a href="https://newsapi.org/" target="_blank">News API</a> -
+          <a href="http://fixer.io/" target="_blank">Fixer</a> -
+          <a href="https://bulma.io/" target="_blank">Bulma</a> -
+          <a href="https://webpack.js.org/" target="_blank">Webpack</a> -
+          <a href="http://www.chartjs.org/" target="_blank">Chart.js</a> -
+          <a href="http://rubyonrails.org/" target="_blank">Ruby on Rails</a>
         </p>
       </div>
     </footer>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -94,7 +112,7 @@ export default {
     } else {
       this.$store.commit('unsetUser');
       this.$store.commit('unsetToken');
-      if (!this.$router.isPublic(this.$route.name)) this.$router.push('login');
+      if (!this.$router.isPublic(this.$route.name)) this.$router.push('home');
     }
   },
 };

@@ -13,3 +13,12 @@ export const isValidEmail = (text) => {
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return (text || '').match(emailRegex);
 };
+
+export const currencyIcon = (name) => {
+  try {
+    const baseUrl = 'https://files.coinmarketcap.com/static/img/coins/32x32';
+    return `${baseUrl}/${name.replace(/\s/g, '-').replace(/\./g, '').toLowerCase()}.png`;
+  } catch (e) {
+    return '';
+  }
+};
