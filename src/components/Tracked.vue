@@ -22,6 +22,26 @@
     </nav>
   </div>
   <div class="block">
+    <div :class="{ 'modal': true, 'is-active': modalUntrack}">
+      <div class="modal-background"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">
+            <span>Untrack {{ selected.currency.name }}</span>
+          </p>
+          <button class="delete" aria-label="close" @click="cancelUntrack()"></button>
+        </header>
+        <section class="modal-card-body">
+          Are you sure?
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button is-info" @click="untrack()">Confirm</button>
+          <button class="button" @click="cancelUntrack()">Cancel</button>
+        </footer>
+      </div>
+    </div>
+  </div>
+  <div class="block">
     <div :class="{ 'modal': true, 'is-active': modal}">
       <div class="modal-background"></div>
       <div class="modal-card">
@@ -60,6 +80,7 @@
           </component>
         </section>
         <footer class="modal-card-foot">
+          <button class="button is-info" @click="confirmUntrack()">Untrack</button>
           <button class="button" @click="closeModal">Close</button>
         </footer>
       </div>
@@ -105,6 +126,7 @@ export default {
   data() {
     return {
       loading: false,
+      modalUntrack: false,
       modal: false,
       icon: '',
       search: '',
@@ -134,6 +156,26 @@ export default {
     },
   },
   methods: {
+    untrack() {
+      this.$store.dispatch('untrack', { symbol: this.selected.currency.symbol })
+        .then(() => {
+          this.modal = false;
+          this.modalUntrack = false;
+          this.loading = true;
+          this.$store.dispatch('fetchTracked').then(() => {
+            this.orderBy('expectedGrowth', 'desc');
+            this.loading = false;
+          });
+        });
+    },
+    confirmUntrack() {
+      this.modal = false;
+      this.modalUntrack = true;
+    },
+    cancelUntrack() {
+      this.openModal(this.selected);
+      this.modalUntrack = false;
+    },
     openModal(trackedCurrency) {
       this.currentComponent = 'tracked-info';
       this.selected = trackedCurrency;
