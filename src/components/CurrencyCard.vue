@@ -67,6 +67,6 @@ export default {
   text-align: right !important;
 }
 .currency-growth {
-  margin-bottom: 10px;
+  margin-bottom: 10px !important;
 }
 </style>
