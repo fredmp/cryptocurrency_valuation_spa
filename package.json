@@ -13,7 +13,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
     "build": "node build/build.js",
     "deploy": "git push heroku master --force",
-    "heroku-postbuild": "NODE_ENV=development yarn install --only=dev --no-shrinkwrap && yarn run build && yarn run start"
+    "heroku-postbuild": "NODE_ENV=development npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "dependencies": {
     "axios": "^0.17.1",
