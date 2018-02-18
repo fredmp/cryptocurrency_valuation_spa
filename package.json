@@ -9,11 +9,11 @@
     "start": "node server.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
-    "test": "npm run unit && npm run e2e",
+    "test": "yarn run unit && yarn run e2e",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
     "build": "node build/build.js",
     "deploy": "git push heroku master --force",
-    "post-install": "NODE_ENV=development npm install --only=dev --no-shrinkwrap && npm run build && npm run start"
+    "heroku-postbuild": "NODE_ENV=development yarn install --only=dev --no-shrinkwrap && yarn run build && yarn run start"
   },
   "dependencies": {
     "axios": "^0.17.1",
