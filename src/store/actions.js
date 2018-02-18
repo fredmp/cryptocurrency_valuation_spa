@@ -1,5 +1,7 @@
 import Axios from 'axios';
 
+const GENERAL_ERROR_MESSAGE = 'There was an error loading the data from the server. Please try again later.';
+
 const hasErrorMessage = function (e) {
   return e.response && e.response.data && e.response.data.message;
 };
@@ -9,7 +11,11 @@ export const fetchPopular = async ({ commit }) => {
     const response = await Axios.get('/currencies/popular');
     commit('popular', response.data);
   } catch (e) {
-    // Handle errors
+    commit('popular', []);
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw new Error(GENERAL_ERROR_MESSAGE);
   }
 };
 
@@ -21,7 +27,11 @@ export const fetchCurrencies = async ({ commit }) => {
       commit('popular', response.data.slice(0, 21));
     }
   } catch (e) {
-    // Handle errors
+    commit('currencies', []);
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw new Error(GENERAL_ERROR_MESSAGE);
   }
 };
 
@@ -30,7 +40,11 @@ export const fetchArticles = async ({ commit }) => {
     const response = await Axios.get('/articles');
     commit('articles', response.data);
   } catch (e) {
-    // Handle errors
+    commit('articles', []);
+    if (hasErrorMessage(e)) {
+      throw new Error(e.response.data.message);
+    }
+    throw new Error(GENERAL_ERROR_MESSAGE);
   }
 };
 

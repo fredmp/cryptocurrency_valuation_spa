@@ -29,8 +29,11 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch('fetchPopular');
-    this.$store.dispatch('fetchArticles');
+    this.$store.dispatch('fetchPopular')
+      .then(this.$store.dispatch('fetchArticles'))
+      .catch((error) => {
+        this.errorMessage = error.message;
+      });
   },
   methods: {
     showErrorMessage(error) {
