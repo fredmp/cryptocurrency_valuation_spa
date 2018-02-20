@@ -3,7 +3,7 @@
     <nav class="navbar is-link">
       <div class="navbar-brand">
         <a class="navbar-item" href="">
-          <h1 class="main-title is-5">Crypto Currency Valuation Tool</h1>
+          <h1 class="main-title is-5">Cryptocurrency Valuation Tool</h1>
         </a>
         <div class="navbar-burger burger" data-target="navMenuColorlink-example">
           <span></span>
@@ -54,16 +54,16 @@
     <footer class="footer">
       <div class="content has-text-centered">
         <p>
-          <strong>Crypto Currency Valuation Tool</strong>
+          <strong>Cryptocurrency Valuation Tool</strong>
           by <a href="http://about.me/fredericomartins" target="_blank">Frederico Martins</a>
           for <a href="https://www.linkedin.com/company/cosmos-tecnologia/" target="_blank">Cosmos Tecnologia</a> - 2018
         </p>
       </div>
       <div class="content has-text-centered">
         <p>
-          <strong>Powered by:</strong>
+          <strong>Built using:</strong>
           <a href="https://vuejs.org/" target="_blank">Vue.js</a> -
-          <a href="https://coinmarketcap.com" target="_blank">CoinMarketCap</a> -
+          <a href="https://coinmarketcap.com" target="_blank">CoinMarketCap API</a> -
           <a href="https://newsapi.org/" target="_blank">News API</a> -
           <a href="http://fixer.io/" target="_blank">Fixer</a> -
           <a href="https://bulma.io/" target="_blank">Bulma</a> -
@@ -80,7 +80,7 @@
 export default {
   data() {
     return {
-      title: 'Crypto Currency Valuation Tool',
+      title: 'Cryptocurrency Valuation Tool',
       errorMessage: null,
     };
   },

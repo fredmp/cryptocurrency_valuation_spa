@@ -49,15 +49,15 @@
           <section class="modal-card-body">
             <p>
               <strong>Max price</strong>:
-              What could be the price if this coin had the same market cap
-              of the dominant coin (BTC)?
+              Is an estimative of potential price considering this coin
+              had the same market cap of the dominant coin (BTC).
               It takes into account the supply of the target coin.
               But characteristics like inflation and other penalties
               must be computed through valuation settings.
             </p>
             <p>
               <strong>Growth potential</strong>:
-              is a comparison between current price and max price
+              Is a comparison between current price and max price
             </p>
           </section>
           <footer class="modal-card-foot">

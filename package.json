@@ -1,7 +1,7 @@
 {
-  "name": "crypto_currency_valuation_spa",
+  "name": "cryptocurrency_valuation_spa",
   "version": "1.0.0",
-  "description": "A VueJS project to organize information about crypto currencies",
+  "description": "A VueJS project to organize information about cryptocurrencies",
   "author": "Frederico Martins Porto <martinsporto@gmail.com>",
   "private": true,
   "scripts": {

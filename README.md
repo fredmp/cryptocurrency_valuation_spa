@@ -1,4 +1,4 @@
-# CryptoCurrency Valuation Tool
+# Cryptocurrency Valuation Tool
 
 This is a simple project that aims to provide tools to help users create their own rules to evaluate cryptocurrency assets (alt coins) and organize their assets.
 
