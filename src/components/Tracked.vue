@@ -85,6 +85,15 @@
         </footer>
       </div>
     </div>
+    <div class="tip">
+      <p>
+        <icon name="info-circle" label="Info"></icon>
+        <span>
+          &nbsp;You need to evaluate each tracked coin to change the expected growth
+          (click on the coin and update the settings in "Valuations" tab).
+        </span>
+      </p>
+    </div>
     <table class="table is-striped is-narrow is-hoverable is-fullwidth">
       <thead>
         <th v-for="h in headers" :key="h.value">
@@ -256,7 +265,7 @@ export default {
 <style scoped>
 .has-addons {
   margin-top: 40px;
-  margin-bottom: 25px;
+  margin-bottom: 5px;
 }
 .search-bar {
   width: 300px;
@@ -273,5 +282,25 @@ export default {
 }
 .main-content {
   min-height: 424px;
+}
+.tip {
+  padding-bottom: 10px;
+  float: right;
+}
+.tip > p {
+  margin: auto;
+  padding-right: 2px;
+  font-size: 0.8em;
+  color: darkgrey;
+}
+.tip > p > span {
+  vertical-align: middle;
+}
+.tip > p > svg {
+  padding: 0px;
+  margin: 0px;
+  display: inline;
+  vertical-align: middle;
+  color: darkgrey;
 }
 </style>
