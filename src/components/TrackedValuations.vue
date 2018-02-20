@@ -66,7 +66,18 @@
       <button class="delete" @click="errorMessage = null"></button>
       <span>{{ errorMessage }}</span>
     </div>
-    <table class="table is-striped is-hoverable is-fullwidth">
+    <article class="message is-info" v-if="isDominant">
+      <div class="message-header">
+        <p>Info</p>
+      </div>
+      <div class="message-body">
+        Currently it's not possible to evaluate the dominant coin (BTC).
+        It's used as a reference to calculate the expected price of all other coins.
+        In the future we plan to improve it to allow the association of
+        the dominant coin to an arbitrary max price, for instance.
+      </div>
+    </article>
+    <table class="table is-striped is-hoverable is-fullwidth" v-else>
       <thead>
         <th class="table-header table-text has-text-left"><td>Name</td></th>
         <th class="table-header table-text has-text-left"><td>Description</td></th>
@@ -129,6 +140,11 @@ export default {
           select.value = valuation.value;
         }
       });
+    },
+  },
+  computed: {
+    isDominant() {
+      return this.selected.currency.symbol === 'BTC';
     },
   },
 };
