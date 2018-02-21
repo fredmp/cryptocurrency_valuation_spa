@@ -1,4 +1,4 @@
-const BASE_IMAGE_URL = 'http://www.cosmostecnologia.com.br/images/';
+const BASE_IMAGE_URL = 'http://www.cosmostecnologia.com.br';
 
 // eslint-disable-next-line import/prefer-default-export
 export const generateColor = (index) => {
@@ -27,7 +27,7 @@ export const currencyIcon = (currency, { type = 'png', size = 32, style = 'color
     } else {
       path = `${size}/${style}/${fileName}.png`;
     }
-    return `${BASE_IMAGE_URL}/${path}`;
+    return `${BASE_IMAGE_URL}/images/${path}`;
   } catch (e) {
     return '';
   }

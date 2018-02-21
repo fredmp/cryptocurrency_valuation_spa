@@ -105,7 +105,15 @@
       <tbody>
         <tr v-for="t in orderedTracked" :key="t.id" @click="openModal(t)">
           <td class="table-text has-text-centered">{{ t.currency.rank }}</td>
-          <td class="table-text has-text-left">{{ t.currency.name }}</td>
+          <td class="table-text has-text-left">
+            <img
+              :src="trackedCurrencyIcon(t.currency)"
+              onerror="this.src='/static/images/default-icon.png'"
+              alt="Currency icon"
+              height="20"
+              width="20">
+            <span class="currency-name">{{ t.currency.name }}</span>
+          </td>
           <td class="table-text has-text-centered">{{ t.currency.symbol }}</td>
           <td class="table-text has-text-right">{{ t.currency.marketCap | round }}</td>
           <td class="table-text has-text-right">{{ t.currency.volume24h | round }}</td>
@@ -228,8 +236,8 @@ export default {
           (t.currency[key] || '').toString().toLowerCase().includes(this.filterBy.toLowerCase()));
       });
     },
-    trackedCurrencyIcon() {
-      return currencyIcon(this.selected.currency, { size: 64 });
+    trackedCurrencyIcon(currency = this.selected.currency) {
+      return currencyIcon(currency, { size: 64 });
     },
     valuationUpdated(valuation) {
       this.orderBy(this.orderedBy.field, this.orderedBy.order);
@@ -297,5 +305,9 @@ export default {
   display: inline;
   vertical-align: middle;
   color: darkgrey;
+}
+.currency-name {
+  vertical-align: top;
+  margin-left: 5px;
 }
 </style>

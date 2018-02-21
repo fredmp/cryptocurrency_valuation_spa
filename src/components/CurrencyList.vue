@@ -129,7 +129,15 @@
             :key="c.name"
             :class="{ 'tracked': trackedCurrencyIds.includes(c.id) }">
             <td class="table-text has-text-centered">{{ c.rank }}</td>
-            <td class="table-text has-text-left">{{ c.name }}</td>
+            <td class="table-text has-text-left">
+              <img
+                :src="icon(c)"
+                onerror="this.src='/static/images/default-icon.png'"
+                alt="Currency icon"
+                height="20"
+                width="20">
+              <span class="currency-name">{{ c.name }}</span>
+            </td>
             <td class="table-text has-text-centered">{{ c.symbol }}</td>
             <td class="table-text has-text-right">{{ c.marketCap | round }}</td>
             <td class="table-text has-text-right">{{ c.price | autoRound }}</td>
@@ -152,6 +160,7 @@
 <script>
 import _ from 'lodash';
 import Spinner from '@/components/common/Spinner';
+import { currencyIcon } from '@/utils/mixins';
 
 export default {
   data() {
@@ -226,6 +235,9 @@ export default {
             this.trackErrorMessage = error.message;
           });
       }
+    },
+    icon(currency) {
+      return currencyIcon(currency, { type: 'svg' });
     },
     openModal(currency) {
       this.selected = currency;
@@ -304,6 +316,10 @@ tr.tracked {
   display: inline;
   vertical-align: middle;
   color: darkgrey;
+}
+.currency-name {
+  vertical-align: top;
+  margin-left: 5px;
 }
 article > .message-body, article > .message-header {
   color: rgb(120, 120, 120) !important;
