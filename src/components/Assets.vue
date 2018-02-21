@@ -61,7 +61,7 @@
             :key="a.id"
             :class="{ 'fade': adding && index + 1 === assets.length }">
             <td class="table-text has-text-centered">
-              <img :src="currencyIcon(a.currency.name)" :alt="a.currency.name">
+              <img :src="icon(a.currency)" :alt="a.currency.name">
             </td>
             <td class="table-text has-text-centered">{{ a.currency.symbol }}</td>
             <td class="table-text has-text-left padding-left">{{ a.currency.name }}</td>
@@ -135,7 +135,7 @@ import vSelect from 'vue-select';
 import _ from 'lodash';
 import DoughnutChart from '@/components/common/DoughnutChart';
 import Spinner from '@/components/common/Spinner';
-import { generateColor } from '@/utils/mixins';
+import { generateColor, currencyIcon } from '@/utils/mixins';
 
 export default {
   name: 'Assets',
@@ -260,13 +260,8 @@ export default {
     showErrorMessage(error) {
       this.errorMessage = (error.message || 'An error has occurred').toString().substr(0, 200);
     },
-    currencyIcon(name) {
-      try {
-        const baseUrl = 'https://files.coinmarketcap.com/static/img/coins/32x32';
-        return `${baseUrl}/${name.replace(/\s/g, '-').replace(/\./g, '').toLowerCase()}.png`;
-      } catch (e) {
-        return '';
-      }
+    icon(currency) {
+      return currencyIcon(currency, { type: 'svg' });
     },
     calculateTotalUserCurrency(usdValue) {
       this.totalUserCurrency = null;

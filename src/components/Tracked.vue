@@ -129,6 +129,7 @@ import Spinner from '@/components/common/Spinner';
 import TrackedInfo from '@/components/TrackedInfo';
 import TrackedNotes from '@/components/TrackedNotes';
 import TrackedValuations from '@/components/TrackedValuations';
+import { currencyIcon } from '@/utils/mixins';
 
 export default {
   name: 'Tracked',
@@ -188,7 +189,7 @@ export default {
     openModal(trackedCurrency) {
       this.currentComponent = 'tracked-info';
       this.selected = trackedCurrency;
-      this.icon = this.currencyIcon();
+      this.icon = this.trackedCurrencyIcon();
       this.modal = true;
     },
     closeModal() {
@@ -227,14 +228,8 @@ export default {
           (t.currency[key] || '').toString().toLowerCase().includes(this.filterBy.toLowerCase()));
       });
     },
-    currencyIcon() {
-      let src = '';
-      try {
-        src = this.selected.currency.name.replace(/\s/g, '-').toLowerCase();
-        return `https://files.coinmarketcap.com/static/img/coins/32x32/${src}.png`;
-      } catch (e) {
-        return '';
-      }
+    trackedCurrencyIcon() {
+      return currencyIcon(this.selected.currency, { size: 64 });
     },
     valuationUpdated(valuation) {
       this.orderBy(this.orderedBy.field, this.orderedBy.order);

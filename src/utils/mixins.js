@@ -1,3 +1,5 @@
+const BASE_IMAGE_URL = 'http://www.cosmostecnologia.com.br/images/';
+
 // eslint-disable-next-line import/prefer-default-export
 export const generateColor = (index) => {
   const colors = [
@@ -14,10 +16,18 @@ export const isValidEmail = (text) => {
   return (text || '').match(emailRegex);
 };
 
-export const currencyIcon = (name) => {
+export const currencyIcon = (currency, { type = 'png', size = 32, style = 'color' }) => {
   try {
-    const baseUrl = 'https://files.coinmarketcap.com/static/img/coins/32x32';
-    return `${baseUrl}/${name.replace(/\s/g, '-').replace(/\./g, '').toLowerCase()}.png`;
+    const fileName = `${currency.symbol.toLowerCase()}`;
+    let path = '';
+    if (type === 'svg') {
+      path = `svg/${style}/${fileName}.svg`;
+    } else if (size === 64) {
+      path = `32@2x/${style}/${fileName}@2x.png`;
+    } else {
+      path = `${size}/${style}/${fileName}.png`;
+    }
+    return `${BASE_IMAGE_URL}/${path}`;
   } catch (e) {
     return '';
   }

@@ -34,7 +34,7 @@ export default {
       return this.currency.percentChange1h < 0 ? 'down' : 'up';
     },
     icon() {
-      return currencyIcon(this.currency.name);
+      return currencyIcon(this.currency, { type: 'svg' });
     },
   },
 };
