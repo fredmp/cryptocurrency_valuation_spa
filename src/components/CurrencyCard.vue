@@ -4,7 +4,12 @@
       <div class="media">
         <div class="media-left">
           <figure class="image is-32x32">
-            <img :src="icon()">
+            <img
+              :src="icon()"
+              onerror="this.src='/static/images/default-icon.png'"
+              alt="Currency icon"
+              height="32"
+              width="32">
           </figure>
         </div>
         <div class="media-content">

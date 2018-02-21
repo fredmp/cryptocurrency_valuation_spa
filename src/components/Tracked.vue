@@ -47,7 +47,12 @@
       <div class="modal-card">
         <header class="modal-card-head">
           <p class="modal-card-title">
-            <img :src="icon" :alt="selected.currency.name">
+            <img
+              :src="icon"
+              onerror="this.src='/static/images/default-icon.png'"
+              alt="Currency icon"
+              height="64"
+              width="64">
             <span>{{ selected.currency.symbol }} - {{ selected.currency.name }}</span>
           </p>
           <button class="delete" aria-label="close" @click="closeModal"></button>

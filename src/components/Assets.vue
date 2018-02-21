@@ -61,7 +61,12 @@
             :key="a.id"
             :class="{ 'fade': adding && index + 1 === assets.length }">
             <td class="table-text has-text-centered">
-              <img :src="icon(a.currency)" :alt="a.currency.name">
+              <img
+                :src="icon(a.currency)"
+                onerror="this.src='/static/images/default-icon.png'"
+                alt="Currency icon"
+                height="32"
+                width="32">
             </td>
             <td class="table-text has-text-centered">{{ a.currency.symbol }}</td>
             <td class="table-text has-text-left padding-left">{{ a.currency.name }}</td>

@@ -5,7 +5,9 @@
         <div class="media-left">
           <figure class="image is-64x64">
             <a :href="article.url" target="_blank">
-              <img :src="article.imageUrl || '../assets/images/96x96.png'" alt="Placeholder image">
+              <img
+                :src="article.imageUrl || '/static/images/default-icon.png'"
+                alt="Article image">
             </a>
           </figure>
         </div>
