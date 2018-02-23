@@ -96,12 +96,9 @@
           </footer>
         </div>
       </div>
-      <div class="tip">
-        <p>
-          <icon name="info-circle" label="Info"></icon>
-          <span>&nbsp;You can click on a coin to start monitoring it</span>
-        </p>
-      </div>
+      <tip>
+        &nbsp;You can click on a coin to start monitoring it
+      </tip>
       <table class="table is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
           <th v-for="h in headers" :key="h.value">
@@ -129,13 +126,10 @@
             :key="c.name"
             :class="{ 'tracked': trackedCurrencyIds.includes(c.id) }">
             <td class="table-text has-text-centered">{{ c.rank }}</td>
+            <td class="table-text has-text-centered">
+              <currency-icon :symbol="c.symbol" size="20"/>
+            </td>
             <td class="table-text has-text-left">
-              <img
-                :src="icon(c)"
-                onerror="this.src='/static/images/default-icon.png'"
-                alt="Currency icon"
-                height="20"
-                width="20">
               <span class="currency-name">{{ c.name }}</span>
             </td>
             <td class="table-text has-text-centered">{{ c.symbol }}</td>
@@ -159,8 +153,9 @@
 
 <script>
 import _ from 'lodash';
+import CurrencyIcon from '@/components/common/CurrencyIcon';
 import Spinner from '@/components/common/Spinner';
-import { currencyIcon } from '@/utils/mixins';
+import Tip from '@/components/common/Tip';
 
 export default {
   data() {
@@ -168,6 +163,7 @@ export default {
       search: '',
       headers: [
         { text: '#', value: 'rank', align: 'centered' },
+        { text: 'Icon', value: 'icon', align: 'centered' },
         { text: 'Name', value: 'name', align: 'left' },
         { text: 'Symbol', value: 'symbol', align: 'centered' },
         { text: 'Market Cap', value: 'marketCap', align: 'right' },
@@ -236,9 +232,6 @@ export default {
           });
       }
     },
-    icon(currency) {
-      return currencyIcon(currency, { type: 'svg' });
-    },
     openModal(currency) {
       this.selected = currency;
       this.modal = true;
@@ -274,7 +267,9 @@ export default {
     });
   },
   components: {
+    CurrencyIcon,
     Spinner,
+    Tip,
   },
 };
 </script>
@@ -296,26 +291,6 @@ tr.tracked {
   border-left-color: lighten(#3273dc, 20%);
   border-left-width: 2px;
   border-left-style: solid;
-}
-.tip {
-  padding-bottom: 10px;
-  float: right;
-}
-.tip > p {
-  margin: auto;
-  padding-right: 2px;
-  font-size: 0.8em;
-  color: darkgrey;
-}
-.tip > p > span {
-  vertical-align: middle;
-}
-.tip > p > svg {
-  padding: 0px;
-  margin: 0px;
-  display: inline;
-  vertical-align: middle;
-  color: darkgrey;
 }
 .currency-name {
   vertical-align: top;

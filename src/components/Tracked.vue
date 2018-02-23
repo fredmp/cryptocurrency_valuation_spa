@@ -21,84 +21,22 @@
       </div>
     </nav>
   </div>
+  <untrack-confirmation-modal
+      :tracked="selected"
+      :visible="untrackConfirmationModalOpen"
+      v-on:confirm="untrack"
+      v-on:close="cancelUntrack"/>
+  <tracked-modal
+      :tracked="selected"
+      :visible="trackedModalOpen"
+      v-on:confirm="confirmUntrack"
+      v-on:close="trackedModalOpen = false"
+      v-on:valuationUpdated="valuationUpdated"/>
   <div class="block">
-    <div :class="{ 'modal': true, 'is-active': modalUntrack}">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">
-            <span>Untrack {{ selected.currency.name }}</span>
-          </p>
-          <button class="delete" aria-label="close" @click="cancelUntrack()"></button>
-        </header>
-        <section class="modal-card-body">
-          Are you sure?
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-info" @click="untrack()">Confirm</button>
-          <button class="button" @click="cancelUntrack()">Cancel</button>
-        </footer>
-      </div>
-    </div>
-  </div>
-  <div class="block">
-    <div :class="{ 'modal': true, 'is-active': modal}">
-      <div class="modal-background"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title">
-            <img
-              :src="icon"
-              onerror="this.src='/static/images/default-icon.png'"
-              alt="Currency icon"
-              height="64"
-              width="64">
-            <span>{{ selected.currency.symbol }} - {{ selected.currency.name }}</span>
-          </p>
-          <button class="delete" aria-label="close" @click="closeModal"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="tabs is-centered">
-            <ul>
-              <li :class="{ 'is-active': currentComponent === 'tracked-info' }">
-                <a @click="currentComponent = 'tracked-info'">
-                  Info
-                </a>
-              </li>
-              <li :class="{ 'is-active': currentComponent === 'tracked-valuations' }">
-                <a @click="currentComponent = 'tracked-valuations'">
-                  Valuations
-                </a>
-              </li>
-              <li :class="{ 'is-active': currentComponent === 'tracked-notes' }">
-                <a @click="currentComponent = 'tracked-notes'">
-                  Notes
-                </a>
-              </li>
-            </ul>
-          </div>
-          <component
-            :is="currentComponent"
-            :selected="selected"
-            @valuationUpdated="valuationUpdated"
-            class="main-content">
-          </component>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button is-info" @click="confirmUntrack()">Untrack</button>
-          <button class="button" @click="closeModal">Close</button>
-        </footer>
-      </div>
-    </div>
-    <div class="tip">
-      <p>
-        <icon name="info-circle" label="Info"></icon>
-        <span>
-          &nbsp;You need to evaluate each tracked coin to change the expected growth
-          (click on the coin and update the settings in "Valuations" tab).
-        </span>
-      </p>
-    </div>
+    <tip>
+      &nbsp;You need to evaluate each tracked coin to change the expected growth
+      (click on the coin and update the settings in "Valuations" tab).
+    </tip>
     <table class="table is-striped is-narrow is-hoverable is-fullwidth">
       <thead>
         <th v-for="h in headers" :key="h.value">
@@ -110,13 +48,10 @@
       <tbody>
         <tr v-for="t in orderedTracked" :key="t.id" @click="openModal(t)">
           <td class="table-text has-text-centered">{{ t.currency.rank }}</td>
+          <td class="table-text has-text-centered">
+            <currency-icon :symbol="t.currency.symbol" size="24"/>
+          </td>
           <td class="table-text has-text-left">
-            <img
-              :src="trackedCurrencyIcon(t.currency)"
-              onerror="this.src='/static/images/default-icon.png'"
-              alt="Currency icon"
-              height="20"
-              width="20">
             <span class="currency-name">{{ t.currency.name }}</span>
           </td>
           <td class="table-text has-text-centered">{{ t.currency.symbol }}</td>
@@ -138,23 +73,21 @@
 
 <script>
 import _ from 'lodash';
+import TrackedModal from '@/components/TrackedModal';
+import UntrackConfirmationModal from '@/components/UntrackConfirmationModal';
+import CurrencyIcon from '@/components/common/CurrencyIcon';
 import Spinner from '@/components/common/Spinner';
-import TrackedInfo from '@/components/TrackedInfo';
-import TrackedNotes from '@/components/TrackedNotes';
-import TrackedValuations from '@/components/TrackedValuations';
-import { currencyIcon } from '@/utils/mixins';
+import Tip from '@/components/common/Tip';
 
 export default {
   name: 'Tracked',
   data() {
     return {
       loading: false,
-      modalUntrack: false,
-      modal: false,
-      icon: '',
       search: '',
       headers: [
         { text: '#', value: 'rank', align: 'centered' },
+        { text: 'Icon', value: 'icon', align: 'centered' },
         { text: 'Name', value: 'name', align: 'left' },
         { text: 'Symbol', value: 'symbol', align: 'centered' },
         { text: 'Market Cap', value: 'marketCap', align: 'right' },
@@ -170,7 +103,8 @@ export default {
       orderedBy: {},
       filterBy: '',
       orderedTracked: [],
-      currentComponent: 'tracked-info',
+      trackedModalOpen: false,
+      untrackConfirmationModalOpen: false,
     };
   },
   watch: {
@@ -182,8 +116,8 @@ export default {
     untrack() {
       this.$store.dispatch('untrack', { symbol: this.selected.currency.symbol })
         .then(() => {
-          this.modal = false;
-          this.modalUntrack = false;
+          this.untrackConfirmationModalOpen = false;
+          this.trackedModalOpen = false;
           this.loading = true;
           this.$store.dispatch('fetchTracked').then(() => {
             this.orderBy('expectedGrowth', 'desc');
@@ -192,22 +126,20 @@ export default {
         });
     },
     confirmUntrack() {
-      this.modal = false;
-      this.modalUntrack = true;
+      this.trackedModalOpen = false;
+      this.untrackConfirmationModalOpen = true;
     },
     cancelUntrack() {
-      this.openModal(this.selected);
-      this.modalUntrack = false;
+      this.trackedModalOpen = true;
+      this.untrackConfirmationModalOpen = false;
     },
     openModal(trackedCurrency) {
-      this.currentComponent = 'tracked-info';
       this.selected = trackedCurrency;
-      this.icon = this.trackedCurrencyIcon();
-      this.modal = true;
+      this.trackedModalOpen = true;
     },
     closeModal() {
       this.selected = { currency: {} };
-      this.modal = false;
+      this.trackedModalOpen = false;
     },
     orderBy(field, order) {
       const textFields = ['name', 'symbol'];
@@ -241,9 +173,6 @@ export default {
           (t.currency[key] || '').toString().toLowerCase().includes(this.filterBy.toLowerCase()));
       });
     },
-    trackedCurrencyIcon(currency = this.selected.currency) {
-      return currencyIcon(currency, { size: 64 });
-    },
     valuationUpdated(valuation) {
       this.orderBy(this.orderedBy.field, this.orderedBy.order);
       this.selected = valuation;
@@ -262,10 +191,11 @@ export default {
     });
   },
   components: {
+    UntrackConfirmationModal,
+    TrackedModal,
+    CurrencyIcon,
     Spinner,
-    TrackedInfo,
-    TrackedNotes,
-    TrackedValuations,
+    Tip,
   },
 };
 </script>
@@ -277,42 +207,5 @@ export default {
 }
 .search-bar {
   width: 300px;
-}
-.modal-card-title {
-  padding: 4px;
-}
-.modal-card-title > img {
-  vertical-align: middle;
-}
-.modal-card-title > span {
-  vertical-align: middle;
-  margin-left: 10px;
-}
-.main-content {
-  min-height: 424px;
-}
-.tip {
-  padding-bottom: 10px;
-  float: right;
-}
-.tip > p {
-  margin: auto;
-  padding-right: 2px;
-  font-size: 0.8em;
-  color: darkgrey;
-}
-.tip > p > span {
-  vertical-align: middle;
-}
-.tip > p > svg {
-  padding: 0px;
-  margin: 0px;
-  display: inline;
-  vertical-align: middle;
-  color: darkgrey;
-}
-.currency-name {
-  vertical-align: top;
-  margin-left: 5px;
 }
 </style>

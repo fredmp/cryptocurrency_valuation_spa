@@ -3,13 +3,8 @@
     <div class="card-content">
       <div class="media">
         <div class="media-left">
-          <figure class="image is-32x32">
-            <img
-              :src="icon()"
-              onerror="this.src='/static/images/default-icon.png'"
-              alt="Currency icon"
-              height="32"
-              width="32">
+          <figure class="image is-64x64">
+            <currency-icon :symbol="currency.symbol || ''" size="60"/>
           </figure>
         </div>
         <div class="media-content">
@@ -29,7 +24,7 @@
 </template>
 
 <script>
-import { currencyIcon } from '@/utils/mixins';
+import CurrencyIcon from '@/components/common/CurrencyIcon';
 
 export default {
   name: 'CurrencyCard',
@@ -38,9 +33,9 @@ export default {
     priceStatus() {
       return this.currency.percentChange1h < 0 ? 'down' : 'up';
     },
-    icon() {
-      return currencyIcon(this.currency, { type: 'svg' });
-    },
+  },
+  components: {
+    CurrencyIcon,
   },
 };
 </script>
@@ -65,7 +60,11 @@ export default {
 .price-down {
   color: hsl(348, 100%, 61%);
 }
-.currency-title, .currency-growth {
+.media-content {
+  margin: auto;
+  margin-left: 5px;
+}
+.currency-growth {
   padding-top: 4px;
 }
 .currency-price, .currency-growth {

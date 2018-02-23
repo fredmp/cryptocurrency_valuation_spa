@@ -61,12 +61,7 @@
             :key="a.id"
             :class="{ 'fade': adding && index + 1 === assets.length }">
             <td class="table-text has-text-centered">
-              <img
-                :src="icon(a.currency)"
-                onerror="this.src='/static/images/default-icon.png'"
-                alt="Currency icon"
-                height="32"
-                width="32">
+              <currency-icon :symbol="a.currency.symbol"/>
             </td>
             <td class="table-text has-text-centered">{{ a.currency.symbol }}</td>
             <td class="table-text has-text-left padding-left">{{ a.currency.name }}</td>
@@ -139,8 +134,9 @@
 import vSelect from 'vue-select';
 import _ from 'lodash';
 import DoughnutChart from '@/components/common/DoughnutChart';
+import CurrencyIcon from '@/components/common/CurrencyIcon';
 import Spinner from '@/components/common/Spinner';
-import { generateColor, currencyIcon } from '@/utils/mixins';
+import { generateColor } from '@/utils/mixins';
 
 export default {
   name: 'Assets',
@@ -265,9 +261,6 @@ export default {
     showErrorMessage(error) {
       this.errorMessage = (error.message || 'An error has occurred').toString().substr(0, 200);
     },
-    icon(currency) {
-      return currencyIcon(currency, { type: 'svg' });
-    },
     calculateTotalUserCurrency(usdValue) {
       this.totalUserCurrency = null;
       if (this.userCurrencyRate) {
@@ -335,6 +328,7 @@ export default {
   components: {
     vSelect,
     DoughnutChart,
+    CurrencyIcon,
     Spinner,
   },
 };

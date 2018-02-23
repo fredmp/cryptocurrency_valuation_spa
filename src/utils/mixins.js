@@ -1,5 +1,3 @@
-const BASE_IMAGE_URL = 'http://www.cosmostecnologia.com.br';
-
 // eslint-disable-next-line import/prefer-default-export
 export const generateColor = (index) => {
   const colors = [
@@ -14,21 +12,4 @@ export const isValidEmail = (text) => {
   // eslint-disable-next-line no-useless-escape
   const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return (text || '').match(emailRegex);
-};
-
-export const currencyIcon = (currency, { type = 'png', size = 32, style = 'color' }) => {
-  try {
-    const fileName = `${currency.symbol.toLowerCase()}`;
-    let path = '';
-    if (type === 'svg') {
-      path = `svg/${style}/${fileName}.svg`;
-    } else if (size === 64) {
-      path = `32@2x/${style}/${fileName}@2x.png`;
-    } else {
-      path = `${size}/${style}/${fileName}.png`;
-    }
-    return `${BASE_IMAGE_URL}/images/${path}`;
-  } catch (e) {
-    return '';
-  }
 };
