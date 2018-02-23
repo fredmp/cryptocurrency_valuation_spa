@@ -1,47 +1,7 @@
 <template>
   <section>
-    <nav class="navbar is-link">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="">
-          <h1 class="main-title is-5">Cryptocurrency Valuation Tool</h1>
-        </a>
-        <div class="navbar-burger burger" data-target="navMenuColorlink-example">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
 
-      <div class="navbar-end">
-        <a class="navbar-item" @click="$router.push('home')">
-          Home
-        </a>
-        <a class="navbar-item" @click="$router.push('all')" v-show="isAuthenticated">
-          All Coins
-        </a>
-        <a
-          :class="{ 'navbar-item': true, 'shake2': appConfig.menuTrackedCoinsHighlight }"
-          @click="$router.push('tracked')"
-           v-show="isAuthenticated">
-          Tracked Coins
-        </a>
-        <a class="navbar-item" @click="$router.push('assets')" v-show="isAuthenticated">
-          My Assets
-        </a>
-        <a class="navbar-item" @click="$router.push('settings')" v-show="isAuthenticated">
-          Settings
-        </a>
-        <a class="navbar-item" @click="logout" v-show="isAuthenticated">
-          Logout
-        </a>
-        <a class="navbar-item" @click="$router.push('login')" v-show="!isAuthenticated">
-          Login
-        </a>
-        <a class="navbar-item" @click="$router.push('register')" v-show="!isAuthenticated">
-          Register
-        </a>
-      </div>
-    </nav>
+    <app-header v-on:logout="logout"/>
 
     <div class="container is-fluid">
       <div class="notification is-danger" v-show="errorMessage">
@@ -51,32 +11,15 @@
       <router-view></router-view>
     </div>
 
-    <footer class="footer">
-      <div class="content has-text-centered">
-        <p>
-          <strong>Cryptocurrency Valuation Tool</strong>
-          by <a href="http://about.me/fredericomartins" target="_blank">Frederico Martins</a>
-          for <a href="https://www.linkedin.com/company/cosmos-tecnologia/" target="_blank">Cosmos Tecnologia</a> - 2018
-        </p>
-      </div>
-      <div class="content has-text-centered">
-        <p>
-          <strong>Built using:</strong>
-          <a href="https://vuejs.org/" target="_blank">Vue.js</a> -
-          <a href="https://coinmarketcap.com" target="_blank">CoinMarketCap API</a> -
-          <a href="https://newsapi.org/" target="_blank">News API</a> -
-          <a href="http://fixer.io/" target="_blank">Fixer</a> -
-          <a href="https://bulma.io/" target="_blank">Bulma</a> -
-          <a href="https://webpack.js.org/" target="_blank">Webpack</a> -
-          <a href="http://www.chartjs.org/" target="_blank">Chart.js</a> -
-          <a href="http://rubyonrails.org/" target="_blank">Ruby on Rails</a>
-        </p>
-      </div>
-    </footer>
+    <app-footer/>
+
   </section>
 </template>
 
 <script>
+import AppHeader from '@/components/AppHeader';
+import AppFooter from '@/components/AppFooter';
+
 export default {
   data() {
     return {
@@ -93,15 +36,11 @@ export default {
         });
     },
   },
-  computed: {
-    appConfig() {
-      return this.$store.getters.appConfig;
-    },
-    isAuthenticated() {
-      return this.$store.getters.token && this.$store.getters.user;
-    },
+  components: {
+    AppHeader,
+    AppFooter,
   },
-  mounted() {
+  created() {
     const user = localStorage.getItem('user');
     const token = localStorage.getItem('token');
 
@@ -119,23 +58,6 @@ export default {
 </script>
 
 <style>
-.navbar {
-  height: 70px;
-  background: #fff;
-  border-radius: 2px;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-}
-.shake2 {
-  animation: shake2 .4s infinite linear both;
-}
-@keyframes shake2 {
-  from, to {
-    transform: translate3d(-10px, 0, 0);
-  }
-  50% {
-    transform: translate3d(10px, 0, 0);
-  }
-}
 .notification {
   margin-top: 20px;
 }
