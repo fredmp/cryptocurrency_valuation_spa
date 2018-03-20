@@ -30,20 +30,12 @@ export default {
       const padding = receivedSize < 32 ? 32 - receivedSize : 0;
       const fixedSize = receivedSize < 32 ? 32 : receivedSize;
       return {
-        'max-width': fixedSize,
-        'max-height': fixedSize,
-        'padding-top': padding > 0 ? padding / 2 : 0,
-        'padding-bottom': padding > 0 ? padding / 2 : 0,
+        'max-width': `${fixedSize}px`,
+        'max-height': `${fixedSize}px`,
+        'padding-top': padding > 0 ? `${padding / 2}px` : 0,
+        'padding-bottom': padding > 0 ? `${padding / 2}px` : 0,
       };
     },
   },
 };
 </script>
-
-<style scoped>
-svg {
-  /* ensure 1:1 aspect ratio, tweak 50 to make SVG larger */
-  width: 50vmin;
-  height: 50vmin;
-}
-</style>
