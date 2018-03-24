@@ -19,7 +19,7 @@ const formatter = new Intl.NumberFormat('en-US', {
 });
 
 if (process.env.NODE_ENV === 'production') {
-  Axios.defaults.baseURL = 'https://cryptocurrency-valuation-api.herokuapp.com/';
+  Axios.defaults.baseURL = 'http://cryptocurrency-valuation-api.cosmostecnologia.com.br/';
 } else {
   Axios.defaults.baseURL = 'http://localhost:3000/';
 }
