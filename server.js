@@ -4,6 +4,7 @@ var path = require('path');
 var serveStatic = require('serve-static');
 
 app = express();
+
 app.use(serveStatic(path.join(__dirname, 'dist')));
 
 app.get('*', function (req, res) {
