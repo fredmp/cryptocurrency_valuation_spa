@@ -59,7 +59,7 @@
           <tr
             v-for="(a, index) in orderedAssets"
             :key="a.id"
-            :class="{ 'fade': adding && index + 1 === assets.length }">
+            :class="{ 'fade': adding && index === 0 }">
             <td class="table-text has-text-centered">
               <currency-icon :symbol="a.currency.symbol"/>
             </td>
@@ -212,6 +212,7 @@ export default {
     },
     add(newAsset) {
       if (newAsset && newAsset.value) {
+        this.filterBy = '';
         this.adding = true;
         this.$store.dispatch('addAsset', { symbol: newAsset.value })
           .then(() => {
@@ -219,7 +220,10 @@ export default {
             return this.$store.dispatch('fetchAssets');
           })
           .then(() => {
-            this.orderBy();
+            const asset = this.assets.find(a => a.currency.symbol === newAsset.value);
+            if (asset) {
+              this.orderedAssets.unshift(asset);
+            }
             setTimeout(() => {
               this.adding = false;
             }, 3500);
@@ -238,7 +242,12 @@ export default {
           { symbol: asset.currency.symbol, amount: event.target.value })
           .then(() => this.$store.dispatch('fetchAssets'))
           .then(() => {
-            this.orderBy();
+            const updatedAsset = this.assets.find(a => a.currency.symbol === asset.currency.symbol);
+            if (updatedAsset) {
+              asset.amount = updatedAsset.amount;
+              asset.btcValue = updatedAsset.btcValue;
+              asset.usdValue = updatedAsset.usdValue;
+            }
             this.editing = null;
           }).catch((error) => {
             this.editing = null;
